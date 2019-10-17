@@ -6,15 +6,17 @@ import QtQuick.Dialogs 1.2
 import Qt.labs.platform 1.0
 import com.tylnesh.backend 1.0
 
-Window {
+ApplicationWindow {
+    id: root
     visible: true
     width: 1920
     height: 1080
     minimumWidth: 1100
     title: qsTr("EmoSense QML Edition")
 
-    //var picturesChosen = false
-    //var videosChosen = false
+
+    Loader { id: pageLoader }
+
     BackEnd {
         id: backend
     }
@@ -182,7 +184,7 @@ Window {
 
         Rectangle{
             id: picturesChooserRectangle
-            anchors.top: displayRectangle
+            anchors.top: displayRectangle.top
             width: parent.width
             height: parent.height/2
             color: "lightblue"
@@ -206,6 +208,8 @@ Window {
                 folder: StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0]
                 onAccepted: {
                         console.log("You chose: " + picturesFolderDialog.folder)
+                        backend.isPicturesSelected = true
+
                     }
                     onRejected: {
                         console.log("Canceled")
@@ -241,6 +245,7 @@ Window {
                 title: "Select Videos Folder"
                 onAccepted: {
                         console.log("You chose: " + videosFolderDialog.folder)
+                        backend.isVideosSelected = true
                     }
                     onRejected: {
                         console.log("Canceled")
@@ -295,6 +300,19 @@ Window {
                     if(videosFolderDialog.folder !== StandardPaths.MoviesLocation){
                     backend.videosFolderPath = videosFolderDialog.folder
                     } else backend.videosFolderPath = "";
+
+                    //if(backend.isPicturesSelected) pageLoader.source = "slideshow.qml"
+
+                    pageLoader.setSource("slideshow.qml",
+                                         {"color": "red"},
+                                         {"buttonsPath": arduinoButtonsPath.text},
+                                         {"sensorsPath": arduinoSensorsPath.text},
+                                         {"affectivaIP": affectivaIP.text},
+                                         {"subjectName": subjectName.text},
+                                         {"subjectAge": subjectAge},
+                                         {"picturesPath": picturesFolderDialog.folder},
+                                         {"videosPath": videosFolderDialog.folder})
+
 
 
 

@@ -7,7 +7,7 @@ class BackEnd : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString subjectName READ subjectName WRITE setSubjectName NOTIFY subjectNameChanged)
-    Q_PROPERTY(QString subjectAge READ subjectAge WRITE setSubjectAge NOTIFY subjectAgeChanged)
+    Q_PROPERTY(int subjectAge READ subjectAge WRITE setSubjectAge NOTIFY subjectAgeChanged)
 
     Q_PROPERTY(QString arduinoButtonsPath READ arduinoButtonsPath WRITE setArduinoButtonsPath NOTIFY arduinoButtonsPathChanged)
     Q_PROPERTY(QString arduinoSensorsPath READ arduinoSensorsPath WRITE setArduinoSensorsPath NOTIFY arduinoSensorsPathChanged)
@@ -16,6 +16,8 @@ class BackEnd : public QObject
     Q_PROPERTY(QString picturesFolderPath READ picturesFolderPath WRITE setPicturesFolderPath NOTIFY picturesFolderPathChanged)
     Q_PROPERTY(QString videosFolderPath READ videosFolderPath WRITE setVideosFolderPath NOTIFY videosFolderPathChanged)
 
+    Q_PROPERTY(bool isPicturesSelected READ isPicturesSelected WRITE setIsPicturesSelected NOTIFY isPicturesSelectedChanged)
+    Q_PROPERTY(bool isVideosSelected READ isVideosSelected WRITE setIsVideosSelected NOTIFY isVideosSelectedChanged)
 
 
 public:
@@ -31,8 +33,11 @@ public:
     QString picturesFolderPath();
     QString videosFolderPath();
 
+    bool isPicturesSelected();
+    bool isVideosSelected();
+
     void setSubjectName(const QString &subjectName);
-    void setSubjectAge(const QString &subjectAge);
+    void setSubjectAge(const int &subjectAge);
 
     void setArduinoButtonsPath(const QString &arduinoButtonsPath);
     void setArduinoSensorsPath(const QString &arduinoSensorsPath);
@@ -40,6 +45,10 @@ public:
 
     void setPicturesFolderPath(const QString &picturesFolderPath);
     void setVideosFolderPath(const QString &videosFolderPath);
+
+    void setIsPicturesSelected(const bool &isPicturesSelected);
+    void setIsVideosSelected(const bool &isVideosSelected);
+
 
 
 signals:
@@ -53,9 +62,12 @@ signals:
     void picturesFolderPathChanged();
     void videosFolderPathChanged();
 
+    void isPicturesSelectedChanged();
+    void isVideosSelectedChanged();
+
 private:
     QString m_subjectName;
-    int m_subjectAge;
+    int m_subjectAge = NULL;
 
     QString m_arduinoButtonsPath;
     QString m_arduinoSensorsPath;
@@ -63,6 +75,9 @@ private:
 
     QString m_picturesFolderPath;
     QString m_videosFolderPath;
+
+    bool m_isPicturesSelected = false;
+    bool m_isVideosSelected = false;
 
 public slots:
 };

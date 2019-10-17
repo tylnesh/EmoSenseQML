@@ -27,12 +27,12 @@ int BackEnd::subjectAge()
     return m_subjectAge;
 }
 
-void BackEnd::setSubjectAge(const QString &subjectAge)
+void BackEnd::setSubjectAge(const int &subjectAge)
 {
-    if (subjectAge.toInt() == m_subjectAge)
+    if (subjectAge == m_subjectAge)
         return;
 
-    m_subjectAge = subjectAge.toInt();
+    m_subjectAge = subjectAge;
     qDebug() << "Subject Age: " << m_subjectAge;
     emit subjectAgeChanged();
 }
@@ -124,6 +124,36 @@ void BackEnd::setVideosFolderPath(const QString &videosFolderPath)
 }
 
 
+
+bool BackEnd::isPicturesSelected(){
+    return m_isPicturesSelected;
+}
+
+void BackEnd::setIsPicturesSelected(const bool &isPicturesSelected)
+{
+    if (isPicturesSelected == m_isPicturesSelected)
+        return;
+
+    m_isPicturesSelected = isPicturesSelected;
+    qDebug() << "Pictures Folder selected " << m_isPicturesSelected;
+    emit isPicturesSelectedChanged();
+}
+
+
+bool BackEnd::isVideosSelected(){
+    return m_isVideosSelected;
+}
+
+void BackEnd::setIsVideosSelected(const bool &isVideosSelected)
+{
+    if (isVideosSelected == m_isVideosSelected)
+        return;
+
+    m_isVideosSelected = isVideosSelected;
+    qDebug() << "Videos Folder selected " << m_isVideosSelected;
+    emit isVideosSelectedChanged();
+
+}
 
 
 
