@@ -1,5 +1,6 @@
 #include "backend.h"
 #include <QDebug>
+#include <QtSerialPort/QSerialPortInfo>
 
 BackEnd::BackEnd(QObject *parent) : QObject(parent)
 {
@@ -155,6 +156,23 @@ void BackEnd::setIsVideosSelected(const bool &isVideosSelected)
 
 }
 
+
+
+
+QStringList BackEnd::availablePorts()
+{
+    QStringList ports;
+
+    for (QSerialPortInfo port : QSerialPortInfo::availablePorts())
+    {
+        //Their is some sorting to do for just list the port I want, with vendor Id & product Id
+        //qDebug() << port.portName();
+        //<< port.vendorIdentifier() << port.productIdentifier()
+        //<< port.hasProductIdentifier() << port.hasVendorIdentifier() << port.isBusy();
+        ports += port.portName();
+    }
+    return ports;
+}
 
 
 

@@ -20,6 +20,8 @@ class BackEnd : public QObject
     Q_PROPERTY(bool isVideosSelected READ isVideosSelected WRITE setIsVideosSelected NOTIFY isVideosSelectedChanged)
 
 
+
+
 public:
     explicit BackEnd(QObject *parent = nullptr);
 
@@ -48,6 +50,8 @@ public:
 
     void setIsPicturesSelected(const bool &isPicturesSelected);
     void setIsVideosSelected(const bool &isVideosSelected);
+
+    Q_INVOKABLE QStringList availablePorts();
 
 
 

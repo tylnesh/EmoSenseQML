@@ -3,7 +3,9 @@ import QtQuick.Window 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
+import QtMultimedia 5.9
 import Qt.labs.platform 1.0
+import Qt.labs.folderlistmodel 2.12
 import com.tylnesh.backend 1.0
 
 ApplicationWindow {
@@ -13,6 +15,13 @@ ApplicationWindow {
     height: 1080
     minimumWidth: 1100
     title: qsTr("EmoSense QML Edition")
+
+    property int i: 0
+
+    Playlist {
+            id: videoPlaylist
+            }
+
 
 
     Loader { id: pageLoader }
@@ -301,18 +310,30 @@ ApplicationWindow {
                     backend.videosFolderPath = videosFolderDialog.folder
                     } else backend.videosFolderPath = "";
 
-                    //if(backend.isPicturesSelected) pageLoader.source = "slideshow.qml"
 
-                    pageLoader.setSource("slideshow.qml",
-                                         {"color": "red"},
-                                         {"buttonsPath": arduinoButtonsPath.text},
-                                         {"sensorsPath": arduinoSensorsPath.text},
-                                         {"affectivaIP": affectivaIP.text},
-                                         {"subjectName": subjectName.text},
-                                         {"subjectAge": subjectAge},
-                                         {"picturesPath": picturesFolderDialog.folder},
-                                         {"videosPath": videosFolderDialog.folder})
+                    if(backend.isPicturesSelected)
+                    {
+                    slideshow.visible = true;
+                    slideshow.visibility = "FullScreen"
+                    slideshowTimer.running = true
+                    console.log(backend.availablePorts())
+                    }
 
+
+
+
+
+                    if(backend.isVideosSelected)
+                    {
+                        slideshow.visible = true;
+                        slideshow.visibility = "FullScreen"
+                        for (var i = 0; i<videosModel.rowCount(); i++)
+                          {
+                            console.log(videosModel.get(i, "fileURL"))
+                            videoPlaylist.addItem(videosModel.get(i, "fileURL"))
+                        }
+                        videoPlayer.play()
+                    }
 
 
 
@@ -320,4 +341,79 @@ ApplicationWindow {
             }
         }
     }
-}
+
+
+    Window{
+    id: slideshow
+    width: 1920
+    height: 1080
+    color: "black"
+
+    FolderListModel{
+    id: picturesModel
+    nameFilters: ["*.png", "*.jpg"]
+    folder:  picturesFolderDialog.folder
+    }
+
+    FolderListModel{
+    id: videosModel
+    nameFilters: ["*.avi", "*.mp4", "*.mkv"]
+    folder:  videosFolderDialog.folder
+    }
+
+
+   Image {
+            id: currentImage
+            source:  ""
+            anchors.fill: parent
+ }
+
+    Timer {
+            id: slideshowTimer
+            interval: 5000; repeat: true
+            onTriggered: {
+                console.log ("fsdfsdf: " + i + " --- " + picturesModel.get (i, "fileURL"))
+                currentImage.source =  picturesModel.get (i, "fileURL")
+                if (++i == picturesModel.count) {
+                    i = 0
+                    running = false;
+                    slideshow.close()
+                }
+            }
+        }
+
+
+    Video {
+        id: videoPlayer
+        width : 1920
+        height : 1080
+        playlist: videoPlaylist
+
+
+        MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    videoPlayer.playlist.next()
+                //videoPlayer.play()
+                }
+
+            }
+
+        }
+
+       // focus: true
+       // Keys.onSpacePressed: videoPlayer.playbackState == MediaPlayer.PlayingState ? videoPlayer.pause() : videoPlayer.play()
+       // Keys.onLeftPressed: videoPlayer.seek(videoPlayer.position - 3000)
+       // Keys.onRightPressed: videoPlayer.seek(videoPlayer.position + 5000)
+    }
+
+
+
+    }
+
+
+
+
+
+
+
