@@ -19,12 +19,12 @@ ApplicationWindow {
     property int i: 0
 
     Playlist {
-            id: videoPlaylist
-            }
+        id: videoPlaylist
+    }
 
-
-
-    Loader { id: pageLoader }
+    Loader {
+        id: pageLoader
+    }
 
     BackEnd {
         id: backend
@@ -73,6 +73,23 @@ ApplicationWindow {
             font.family: "Helvetica"
             font.pointSize: 24
             color: "black"
+        }
+
+        ComboBox {
+            editable: true
+
+            model: ListModel {
+                id: model
+                ListElement { text: "Banana"; color: "Yellow" }
+                ListElement { text: "Apple"; color: "Green" }
+                ListElement { text: "Coconut"; color: "Brown" }
+            }
+            onAccepted: {
+                if (find(currentText) === -1) {
+                    model.append({text: editText})
+                    currentIndex = find(editText)
+                }
+            }
         }
 
         TextField {
@@ -131,7 +148,14 @@ ApplicationWindow {
         width: parent.width / 3
         height: parent.height - titleRectangle.height - bottomRectangle.height
         Layout.minimumWidth: infoHeader.width
-        color: "#dfdfdf"
+        color: "#fefefe"
+
+
+        ColumnLayout {
+            id: infoRowLayout
+            anchors.fill: infoRectangle
+            spacing: 1
+            //anchors.top: infoHeader.bottom
 
         Text {
             id: infoHeader
@@ -143,43 +167,49 @@ ApplicationWindow {
             color: "black"
         }
 
-        Text {
-            id: subjectNameLabel
-            text: "Name:"
-            anchors.top: infoHeader.bottom
-            font.family: "Helvetica"
-            font.pointSize: 24
-            color: "black"
-        }
 
-        TextField {
-            id: subjectName
-            anchors.top: infoHeader.bottom
-            anchors.left: subjectNameLabel.right
-            anchors.leftMargin: 20
-            text: backend.subjectName
-            placeholderText: qsTr("Subject name")
-            //onTextChanged: backend.subjectName = subjectName.text
-            //onTextEdited: backend.subjectName = text
-        }
 
-        Text {
-            id: ageLabel
-            text: "Age:"
-            anchors.top: subjectNameLabel.bottom
-            font.family: "Helvetica"
-            font.pointSize: 24
-            color: "black"
-        }
 
-        TextField {
-            id: subjectAge
-            anchors.top: subjectNameLabel.bottom
-            anchors.left: ageLabel.right
-            anchors.leftMargin: 20
-            text: backend.subjectAge
-            placeholderText: qsTr("Age")
-            //onTextChanged: backend.subjectAge = parseInt(subjectAge.text)
+
+                Text {
+                    id: subjectNameLabel
+                    text: "Name:"
+                    font.family: "Helvetica"
+                    font.pointSize: 24
+                    color: "black"
+                }
+
+                TextField {
+                    id: subjectName
+                    //anchors.leftMargin: 20
+                    text: backend.subjectName
+                    placeholderText: qsTr("Subject name")
+                    //onTextChanged: backend.subjectName = subjectName.text
+                    //onTextEdited: backend.subjectName = text
+                }
+
+
+
+
+            Text {
+                id: ageLabel
+                text: "Age:"
+                //anchors.top: subjectNameLabel.bottom
+                font.family: "Helvetica"
+                font.pointSize: 24
+                color: "black"
+            }
+
+            TextField {
+                id: subjectAge
+               // anchors.top: subjectNameLabel.bottom
+               // anchors.left: ageLabel.right
+               // anchors.leftMargin: 20
+                text: backend.subjectAge
+                placeholderText: qsTr("Age")
+                //onTextChanged: backend.subjectAge = parseInt(subjectAge.text)
+            }
+
         }
     }
 
@@ -191,19 +221,19 @@ ApplicationWindow {
         height: parent.height - titleRectangle.height - bottomRectangle.height
         color: "#eeeeee"
 
-        Rectangle{
+        Rectangle {
             id: picturesChooserRectangle
             anchors.top: displayRectangle.top
             width: parent.width
-            height: parent.height/2
+            height: parent.height / 2
             color: "lightblue"
-            Text{
-                    id: picturesChooserLabel
-                    text: "Select Pictures Folder"
-                    anchors.centerIn: parent
-                    font.family: "Helvetica"
-                    font.pointSize: 24
-                    color: "black"
+            Text {
+                id: picturesChooserLabel
+                text: "Select Pictures Folder"
+                anchors.centerIn: parent
+                font.family: "Helvetica"
+                font.pointSize: 24
+                color: "black"
             }
 
             MouseArea {
@@ -214,33 +244,31 @@ ApplicationWindow {
             FolderDialog {
                 id: picturesFolderDialog
                 title: "Select Pictures Folder"
-                folder: StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0]
+                folder: StandardPaths.standardLocations(
+                            StandardPaths.PicturesLocation)[0]
                 onAccepted: {
-                        console.log("You chose: " + picturesFolderDialog.folder)
-                        backend.isPicturesSelected = true
-
-                    }
-                    onRejected: {
-                        console.log("Canceled")
-                    }
+                    console.log("You chose: " + picturesFolderDialog.folder)
+                    backend.isPicturesSelected = true
+                }
+                onRejected: {
+                    console.log("Canceled")
+                }
             }
         }
 
-
-
-        Rectangle{
+        Rectangle {
             id: videosChooserRectangle
             anchors.top: picturesChooserRectangle.bottom
             width: parent.width
-            height: parent.height/2
+            height: parent.height / 2
             color: "lightgreen"
-            Text{
-                    id: videosChooserLabel
-                    text: "Select Videos Folder"
-                    anchors.centerIn: parent
-                    font.family: "Helvetica"
-                    font.pointSize: 24
-                    color: "black"
+            Text {
+                id: videosChooserLabel
+                text: "Select Videos Folder"
+                anchors.centerIn: parent
+                font.family: "Helvetica"
+                font.pointSize: 24
+                color: "black"
             }
 
             MouseArea {
@@ -250,19 +278,18 @@ ApplicationWindow {
 
             FolderDialog {
                 id: videosFolderDialog
-                folder: StandardPaths.standardLocations(StandardPaths.MoviesLocation)[0]
+                folder: StandardPaths.standardLocations(
+                            StandardPaths.MoviesLocation)[0]
                 title: "Select Videos Folder"
                 onAccepted: {
-                        console.log("You chose: " + videosFolderDialog.folder)
-                        backend.isVideosSelected = true
-                    }
-                    onRejected: {
-                        console.log("Canceled")
-                    }
+                    console.log("You chose: " + videosFolderDialog.folder)
+                    backend.isVideosSelected = true
+                }
+                onRejected: {
+                    console.log("Canceled")
+                }
             }
         }
-
-
     }
 
     Rectangle {
@@ -302,118 +329,102 @@ ApplicationWindow {
                     backend.subjectName = subjectName.text
                     backend.subjectAge = subjectAge.text
 
-                    if(picturesFolderDialog.folder !== StandardPaths.PicturesLocation){
-                    backend.picturesFolderPath = picturesFolderDialog.folder
-                    } else backend.picturesFolderPath = "";
+                    if (picturesFolderDialog.folder !== StandardPaths.PicturesLocation) {
+                        backend.picturesFolderPath = picturesFolderDialog.folder
+                    } else
+                        backend.picturesFolderPath = ""
 
-                    if(videosFolderDialog.folder !== StandardPaths.MoviesLocation){
-                    backend.videosFolderPath = videosFolderDialog.folder
-                    } else backend.videosFolderPath = "";
+                    if (videosFolderDialog.folder !== StandardPaths.MoviesLocation) {
+                        backend.videosFolderPath = videosFolderDialog.folder
+                    } else
+                        backend.videosFolderPath = ""
 
-
-                    if(backend.isPicturesSelected)
-                    {
-                    slideshow.visible = true;
-                    slideshow.visibility = "FullScreen"
-                    slideshowTimer.running = true
-                    console.log(backend.availablePorts())
+                    if (backend.isPicturesSelected) {
+                        slideshow.visible = true
+                        slideshow.visibility = "FullScreen"
+                        slideshowTimer.running = true
+                        console.log(backend.availablePorts())
                     }
 
-
-
-
-
-                    if(backend.isVideosSelected)
-                    {
-                        slideshow.visible = true;
+                    if (backend.isVideosSelected) {
+                        slideshow.visible = true
                         slideshow.visibility = "FullScreen"
-                        for (var i = 0; i<videosModel.rowCount(); i++)
-                          {
+                        for (var i = 0; i < videosModel.rowCount(); i++) {
                             console.log(videosModel.get(i, "fileURL"))
                             videoPlaylist.addItem(videosModel.get(i, "fileURL"))
                         }
                         videoPlayer.play()
                     }
-
-
-
                 }
             }
         }
     }
 
+    Window {
+        id: slideshow
+        width: 1920
+        height: 1080
+        color: "black"
 
-    Window{
-    id: slideshow
-    width: 1920
-    height: 1080
-    color: "black"
+        FolderListModel {
+            id: picturesModel
+            nameFilters: ["*.png", "*.jpg"]
+            folder: picturesFolderDialog.folder
+        }
 
-    FolderListModel{
-    id: picturesModel
-    nameFilters: ["*.png", "*.jpg"]
-    folder:  picturesFolderDialog.folder
-    }
+        FolderListModel {
+            id: videosModel
+            nameFilters: ["*.avi", "*.mp4", "*.mkv"]
+            folder: videosFolderDialog.folder
+        }
 
-    FolderListModel{
-    id: videosModel
-    nameFilters: ["*.avi", "*.mp4", "*.mkv"]
-    folder:  videosFolderDialog.folder
-    }
-
-
-   Image {
+        Image {
             id: currentImage
-            source:  ""
+            source: ""
             anchors.fill: parent
- }
+        }
 
-    Timer {
+        Timer {
             id: slideshowTimer
-            interval: 5000; repeat: true
+            interval: 5000
+            repeat: true
             onTriggered: {
-                console.log ("fsdfsdf: " + i + " --- " + picturesModel.get (i, "fileURL"))
-                currentImage.source =  picturesModel.get (i, "fileURL")
+                console.log("fsdfsdf: " + i + " --- " + picturesModel.get(
+                                i, "fileURL"))
+                currentImage.source = picturesModel.get(i, "fileURL")
                 if (++i == picturesModel.count) {
                     i = 0
-                    running = false;
+                    running = false
                     slideshow.close()
                 }
             }
         }
 
+        Video {
+            id: videoPlayer
+            width: 1920
+            height: 1080
+            playlist: videoPlaylist
 
-    Video {
-        id: videoPlayer
-        width : 1920
-        height : 1080
-        playlist: videoPlaylist
-
-
-        MouseArea {
+            MouseArea {
                 anchors.fill: parent
                 onClicked: {
                     videoPlayer.playlist.next()
-                //videoPlayer.play()
+                    console.log(backend.availablePorts())
+                    //videoPlayer.play()
                 }
-
             }
 
+            focus: true
+            Keys.onEscapePressed: {
+                videoPlayer.stop()
+                slideshow.close()
+            }
+            Keys.onSpacePressed: videoPlayer.playbackState
+                                 == MediaPlayer.PlayingState ? videoPlayer.pause(
+                                                                   ) : videoPlayer.play()
+            Keys.onLeftPressed: videoPlayer.seek(videoPlayer.position - 3000)
+            Keys.onRightPressed: videoPlayer.seek(videoPlayer.position + 5000)
         }
-
-       // focus: true
-       // Keys.onSpacePressed: videoPlayer.playbackState == MediaPlayer.PlayingState ? videoPlayer.pause() : videoPlayer.play()
-       // Keys.onLeftPressed: videoPlayer.seek(videoPlayer.position - 3000)
-       // Keys.onRightPressed: videoPlayer.seek(videoPlayer.position + 5000)
     }
-
-
-
-    }
-
-
-
-
-
-
-
+}
