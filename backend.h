@@ -2,6 +2,7 @@
 #define BACKEND_H
 
 #include <QObject>
+#include <QSerialPort>
 
 class BackEnd : public QObject
 {
@@ -52,6 +53,7 @@ public:
     void setIsVideosSelected(const bool &isVideosSelected);
 
     Q_INVOKABLE QStringList availablePorts();
+    Q_INVOKABLE void connectAll();
 
 
 
@@ -82,6 +84,9 @@ private:
 
     bool m_isPicturesSelected = false;
     bool m_isVideosSelected = false;
+
+    QSerialPort *buttonPort;
+    QSerialPort *sensorsPort;
 
 public slots:
 };

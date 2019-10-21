@@ -166,12 +166,75 @@ QStringList BackEnd::availablePorts()
     for (QSerialPortInfo port : QSerialPortInfo::availablePorts())
     {
         //Their is some sorting to do for just list the port I want, with vendor Id & product Id
-        //qDebug() << port.portName();
-        //<< port.vendorIdentifier() << port.productIdentifier()
+        //qDebug() << port.portName()
+        //<< port.vendorIdentifier() << port.productIdentifier() << port.vendorIdentifier() << port.description() << port.manufacturer();
         //<< port.hasProductIdentifier() << port.hasVendorIdentifier() << port.isBusy();
-        ports += port.portName();
+
+        //QString currentPort = " " + port.portName() + " " +port.description() + " " + port.manufacturer();
+        //ports += currentPort;
+        ports += port.systemLocation();
     }
     return ports;
+}
+
+void BackEnd::connectAll()
+{
+    buttonPort = new QSerialPort();
+    sensorsPort = new QSerialPort();
+
+    buttonPort->setPortName(arduinoButtonsPath());
+    sensorsPort->setPortName(arduinoSensorsPath());
+
+    if (buttonPort->open(QIODevice::ReadWrite))
+      {
+       buttonPort->setBaudRate(QSerialPort::Baud9600);
+       buttonPort->setDataBits(QSerialPort::Data8);
+       buttonPort->setParity(QSerialPort::NoParity);
+       buttonPort->setStopBits(QSerialPort::OneStop);
+       buttonPort->setFlowControl(QSerialPort::NoFlowControl);
+       qDebug("Connection established");
+
+       connect(buttonPort, &QSerialPort::readyRead, this, &BackEnd::handleReadyRead);
+       connect(buttonPort, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
+                       this, &BackEnd::handleError);
+
+       } else qDebug("Connection Error");
+
+    if (sensorsPort->open(QIODevice::ReadWrite))
+      {
+       sensorsPort->setBaudRate(QSerialPort::Baud9600);
+       sensorsPort->setDataBits(QSerialPort::Data8);
+       sensorsPort->setParity(QSerialPort::NoParity);
+       sensorsPort->setStopBits(QSerialPort::OneStop);
+       sensorsPort->setFlowControl(QSerialPort::NoFlowControl);
+       qDebug("Connection established");
+
+       connect(sensorsPort, &QSerialPort::readyRead, this, &BackEnd::readSerial);
+       connect(sensorsPort, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
+                       this, &BackEnd::handleError);
+
+       } else qDebug("Connection Error");
+
+
+
+
+    /*serial->setPortName(ui->arduinoBox->currentText());
+     if (serial->open(QIODevice::ReadWrite))
+       {
+        serial->setBaudRate(QSerialPort::Baud9600);
+        serial->setDataBits(QSerialPort::Data8);
+        serial->setParity(QSerialPort::NoParity);
+        serial->setStopBits(QSerialPort::OneStop);
+        serial->setFlowControl(QSerialPort::NoFlowControl);
+       qDebug("Connection established");
+
+
+        connect(serial, &QSerialPort::readyRead, this, &MainWindow::handleReadyRead);
+        connect(serial, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
+                        this, &MainWindow::handleError);
+
+        } else qDebug("Connection Error");*/
+
 }
 
 

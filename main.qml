@@ -5,7 +5,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
 import QtMultimedia 5.9
 import Qt.labs.platform 1.0
-import Qt.labs.folderlistmodel 2.12
+import Qt.labs.folderlistmodel 2.2
 import com.tylnesh.backend 1.0
 
 ApplicationWindow {
@@ -15,6 +15,8 @@ ApplicationWindow {
     height: 1080
     minimumWidth: 1100
     title: qsTr("EmoSense QML Edition")
+
+
 
     property int i: 0
 
@@ -28,6 +30,12 @@ ApplicationWindow {
 
     BackEnd {
         id: backend
+    }
+
+    Component.onCompleted: {
+
+        console.log(backend.availablePorts())
+
     }
 
     Rectangle {
@@ -76,31 +84,17 @@ ApplicationWindow {
         }
 
         ComboBox {
-            editable: true
-
-            model: ListModel {
-                id: model
-                ListElement { text: "Banana"; color: "Yellow" }
-                ListElement { text: "Apple"; color: "Green" }
-                ListElement { text: "Coconut"; color: "Brown" }
-            }
-            onAccepted: {
-                if (find(currentText) === -1) {
-                    model.append({text: editText})
-                    currentIndex = find(editText)
-                }
-            }
-        }
-
-        TextField {
             id: arduinoButtonsPath
             anchors.top: inputHeader.bottom
             anchors.left: arduinoButtonsLabel.right
             anchors.leftMargin: 20
-            text: backend.arduinoButtonsPath
-            placeholderText: qsTr("Path to the Arduino Buttons")
-            //onTextChanged: backend.arduinoButtonsPath = arduinoButtonsPath.text
+            model : backend.availablePorts()
+            onAccepted: {
+                 console.log(currentText)
+            }
         }
+
+
 
         Text {
             id: arduinoSensorsLabel
@@ -111,14 +105,15 @@ ApplicationWindow {
             color: "black"
         }
 
-        TextField {
+        ComboBox {
             id: arduinoSensorsPath
             anchors.top: arduinoButtonsLabel.bottom
             anchors.left: arduinoSensorsLabel.right
             anchors.leftMargin: 20
-            text: backend.arduinoSensorsPath
-            placeholderText: qsTr("Path to the Arduino Sensors ")
-            //onTextChanged: backend.arduinoSensorsPath = arduinoSensorsPath.text
+            model : backend.availablePorts()
+            onAccepted: {
+                console.log(currentText)
+            }
         }
 
         Text {
@@ -137,7 +132,6 @@ ApplicationWindow {
             anchors.leftMargin: 20
             text: backend.affectivaIP
             placeholderText: qsTr("Affectiva IP")
-            //onTextChanged: backend.affectivaIP = affectivaIP.text
         }
     }
 
@@ -322,9 +316,11 @@ ApplicationWindow {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    backend.arduinoButtonsPath = arduinoButtonsPath.text
-                    backend.arduinoSensorsPath = arduinoSensorsPath.text
+                    backend.arduinoButtonsPath = arduinoButtonsPath.currentText
+                    backend.arduinoSensorsPath = arduinoSensorsPath.currentText
                     backend.affectivaIP = affectivaIP.text
+
+                    backend.connectAll()
 
                     backend.subjectName = subjectName.text
                     backend.subjectAge = subjectAge.text
@@ -354,6 +350,8 @@ ApplicationWindow {
                             videoPlaylist.addItem(videosModel.get(i, "fileURL"))
                         }
                         videoPlayer.play()
+
+
                     }
                 }
             }
@@ -389,8 +387,6 @@ ApplicationWindow {
             interval: 5000
             repeat: true
             onTriggered: {
-                console.log("fsdfsdf: " + i + " --- " + picturesModel.get(
-                                i, "fileURL"))
                 currentImage.source = picturesModel.get(i, "fileURL")
                 if (++i == picturesModel.count) {
                     i = 0
@@ -410,14 +406,13 @@ ApplicationWindow {
                 anchors.fill: parent
                 onClicked: {
                     videoPlayer.playlist.next()
-                    console.log(backend.availablePorts())
-                    //videoPlayer.play()
-                }
+                    }
             }
 
             focus: true
             Keys.onEscapePressed: {
                 videoPlayer.stop()
+                slideshowTimer.stop()
                 slideshow.close()
             }
             Keys.onSpacePressed: videoPlayer.playbackState
