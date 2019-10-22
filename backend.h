@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QSerialPort>
+#include <QTimer>
 
 class BackEnd : public QObject
 {
@@ -55,7 +56,7 @@ public:
     Q_INVOKABLE QStringList availablePorts();
     Q_INVOKABLE void connectAll();
 
-    void readSerial();
+    void readSerial(QSerialPort &serial);
     void handleTimeout();
     void handleError(QSerialPort::SerialPortError error);
 
@@ -90,6 +91,10 @@ private:
 
     QSerialPort *buttonPort;
     QSerialPort *sensorsPort;
+
+    QTimer timeoutTimer;
+    QByteArray buttonData;
+    QByteArray sensorsData;
 
 public slots:
 };

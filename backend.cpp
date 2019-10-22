@@ -220,5 +220,13 @@ void BackEnd::connectAll()
 
 }
 
+void BackEnd::readSerial(QSerialPort &serial)
+{
+
+
+}
+
+
+
 
 
