@@ -215,9 +215,72 @@ void BackEnd::connectAll()
 
        } else qDebug("Sensors Port: Connection Error");
 
+}
 
 
+void BackEnd::readSerial()
+{
+ m_readData.append(serial->readAll());
+    if (!m_timer.isActive())
+        m_timer.start(20);
+}
 
+
+void BackEnd::handleTimeout()
+{
+    if (m_readData.isEmpty()) {
+        //qDebug() << QObject::tr("No data was currently available for reading from port %1").arg(serial->portName()) << endl;
+    } else {
+        //qDebug() << QObject::tr("Data successfully received from port %1").arg(serial->portName()) << endl;
+        //qDebug(m_readData);
+
+        if (QString(m_readData).length() != 0 &&  QString(m_readData).length() < 15)
+        {
+
+        arduino = QString(m_readData);
+        if (arduino.split(":").length()==2){
+            arduinoGSR = arduino.split(":").at(0).toDouble();
+            //qDebug()<< "GSR: " << arduinoGSR;
+            if (arduino.split(":").at(1)>0)
+            {
+                if (arduino.split(":").at(1).at(0) == "+" || arduino.split(":").at(1).at(0) == "-")
+                {    arduinoVal = arduino.split(":").at(1).at(0);
+                qDebug()<< "Val: " << arduinoVal;
+                if (arduino_prev != arduinoVal) {
+                    arduino_prev = arduinoVal;
+
+                    QTextStream measurementStream( &measurement );
+                    static QTime time(QTime::currentTime());
+                    timeReacted = QDateTime::currentMSecsSinceEpoch() - timeShown;
+                    if(ui->isAffectiva) affectiva_data = QString::fromStdString(s_recv (subscriber));
+                    else affectiva_data = "0;0;0;0;0;0;0;0;0";
+                    qDebug() << "Time Reacted: " <<timeReacted;
+                    qDebug() << "Affect" << affectiva_data;
+                    if (affectiva_data == "aff") affectiva_data = "0;0;0;0;0;0;0;0;0";
+                    measurementStream << affectiva_data << ";" << diameter_3d_0 << ";"  << diameter_3d_1 << ";"  << gazeX << ";" << gazeY << ";" << arduinoGSR << ";" << arduinoVal << ";" << filename << ";"  << time.currentTime().toString() << ";" << timeReacted << endl;
+
+                    counter++;
+                    timeReacted = 0;
+                    ui->label->setVisible(false);
+                    QThread::msleep(1000);
+                    this->update();
+                    }
+            }
+            }
+         }
+        }
+        m_readData = "";
+
+           }
+}
+
+
+void BackEnd::handleError(QSerialPort::SerialPortError serialPortError)
+{
+    if (serialPortError == QSerialPort::ReadError) {
+        //qDebug(QObject::tr("An I/O error occurred while reading the data from port %1, error: %2").arg(serial->portName()).arg(serial->errorString()));
+        //QCoreApplication::exit(1);
+    }
 }
 
 

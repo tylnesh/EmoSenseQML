@@ -55,6 +55,9 @@ public:
     Q_INVOKABLE QStringList availablePorts();
     Q_INVOKABLE void connectAll();
 
+    void readSerial();
+    void handleTimeout();
+    void handleError(QSerialPort::SerialPortError error);
 
 
 signals:
@@ -73,7 +76,7 @@ signals:
 
 private:
     QString m_subjectName;
-    int m_subjectAge = NULL;
+    int m_subjectAge = 0;
 
     QString m_arduinoButtonsPath;
     QString m_arduinoSensorsPath;
