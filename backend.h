@@ -56,8 +56,10 @@ public:
     Q_INVOKABLE QStringList availablePorts();
     Q_INVOKABLE void connectAll();
 
-    void readSerial(QSerialPort &serial);
-    void handleTimeout();
+    void readButtons();
+    void readSensors();
+    void handleButtonsTimeout();
+    void handleSensorsTimeout();
     void handleError(QSerialPort::SerialPortError error);
 
 
@@ -89,12 +91,19 @@ private:
     bool m_isPicturesSelected = false;
     bool m_isVideosSelected = false;
 
-    QSerialPort *buttonPort;
+    QSerialPort *buttonsPort;
     QSerialPort *sensorsPort;
 
     QTimer timeoutTimer;
     QByteArray buttonData;
     QByteArray sensorsData;
+
+
+    QByteArray  m_readButtons;
+    QByteArray m_readSensors;
+
+    QTimer m_buttonsTimer;
+    QTimer m_sensorsTimer;
 
 public slots:
 };

@@ -165,13 +165,6 @@ QStringList BackEnd::availablePorts()
 
     for (QSerialPortInfo port : QSerialPortInfo::availablePorts())
     {
-        //Their is some sorting to do for just list the port I want, with vendor Id & product Id
-        //qDebug() << port.portName()
-        //<< port.vendorIdentifier() << port.productIdentifier() << port.vendorIdentifier() << port.description() << port.manufacturer();
-        //<< port.hasProductIdentifier() << port.hasVendorIdentifier() << port.isBusy();
-
-        //QString currentPort = " " + port.portName() + " " +port.description() + " " + port.manufacturer();
-        //ports += currentPort;
         ports += port.systemLocation();
     }
     return ports;
@@ -179,24 +172,27 @@ QStringList BackEnd::availablePorts()
 
 void BackEnd::connectAll()
 {
-    buttonPort = new QSerialPort();
+    buttonsPort = new QSerialPort();
     sensorsPort = new QSerialPort();
 
-    buttonPort->setPortName(arduinoButtonsPath());
+    buttonsPort->setPortName(arduinoButtonsPath());
     sensorsPort->setPortName(arduinoSensorsPath());
 
-    if (buttonPort->open(QIODevice::ReadWrite))
+    if (buttonsPort->open(QIODevice::ReadWrite))
       {
-       buttonPort->setBaudRate(QSerialPort::Baud9600);
-       buttonPort->setDataBits(QSerialPort::Data8);
-       buttonPort->setParity(QSerialPort::NoParity);
-       buttonPort->setStopBits(QSerialPort::OneStop);
-       buttonPort->setFlowControl(QSerialPort::NoFlowControl);
+       buttonsPort->setBaudRate(QSerialPort::Baud9600);
+       buttonsPort->setDataBits(QSerialPort::Data8);
+       buttonsPort->setParity(QSerialPort::NoParity);
+       buttonsPort->setStopBits(QSerialPort::OneStop);
+       buttonsPort->setFlowControl(QSerialPort::NoFlowControl);
        qDebug("Button Port: Connection established");
 
-       connect(buttonPort, &QSerialPort::readyRead, this, &BackEnd::readSerial);
-       connect(buttonPort, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
+       connect(buttonsPort, &QSerialPort::readyRead, this, &BackEnd::readButtons);
+       connect(buttonsPort, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
                        this, &BackEnd::handleError);
+
+       connect(&m_buttonsTimer, &QTimer::timeout, this, &BackEnd::handleButtonsTimeout);
+       m_buttonsTimer.start(20);
 
        } else qDebug("Button Port: Connection Error");
 
@@ -209,23 +205,61 @@ void BackEnd::connectAll()
        sensorsPort->setFlowControl(QSerialPort::NoFlowControl);
        qDebug("Sensors Port: Connection established");
 
-       connect(sensorsPort, &QSerialPort::readyRead, this, &BackEnd::readSerial);
+       connect(sensorsPort, &QSerialPort::readyRead, this, &BackEnd::readSensors);
        connect(sensorsPort, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
                        this, &BackEnd::handleError);
 
+       connect(&m_sensorsTimer, &QTimer::timeout, this, &BackEnd::handleSensorsTimeout);
+       m_sensorsTimer.start(20);
+
        } else qDebug("Sensors Port: Connection Error");
-
-
-
-
 }
 
-void BackEnd::readSerial(QSerialPort &serial)
+void BackEnd::readButtons()
 {
 
-
+    m_readButtons.append(buttonsPort->readAll());
+       if (!m_buttonsTimer.isActive())
+           m_buttonsTimer.start(20);
 }
 
+void BackEnd::readSensors()
+{
+
+    m_readSensors.append(sensorsPort->readAll());
+       if (!m_sensorsTimer.isActive())
+           m_sensorsTimer.start(20);
+}
+
+
+void BackEnd::handleButtonsTimeout(){
+
+    if(!m_readButtons.isEmpty())
+    {
+       // qDebug()<< "Buttons Val: " << QString(m_readButtons);
+    }
+    else {
+        qDebug() << "Haven't received data from Arduino Buttons module";
+    }
+}
+
+void BackEnd::handleSensorsTimeout(){
+
+    if(!m_readSensors.isEmpty())
+    {
+        qDebug()<< "Sensors Val: " << QString(m_readSensors);
+    }
+    else {
+        qDebug() << "Haven't received data from Arduino Sensors module";
+    }
+}
+
+void BackEnd::handleError(QSerialPort::SerialPortError serialPortError)
+{
+    if (serialPortError == QSerialPort::ReadError) {
+      //  qDebug(QObject::tr("An I/O error occurred while reading the data from port %1, error: %2").arg(serial->portName()).arg(serial->errorString()));
+    }
+}
 
 
 

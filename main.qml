@@ -166,7 +166,7 @@ ApplicationWindow {
 
 
                 Text {
-                    id: subjectNameLabel
+                    id: subjectIDLabel
                     text: "Name:"
                     font.family: "Helvetica"
                     font.pointSize: 24
@@ -174,7 +174,7 @@ ApplicationWindow {
                 }
 
                 TextField {
-                    id: subjectName
+                    id: subjectID
                     //anchors.leftMargin: 20
                     text: backend.subjectName
                     placeholderText: qsTr("Subject name")
@@ -196,14 +196,31 @@ ApplicationWindow {
 
             TextField {
                 id: subjectAge
-               // anchors.top: subjectNameLabel.bottom
-               // anchors.left: ageLabel.right
-               // anchors.leftMargin: 20
+
                 text: backend.subjectAge
                 placeholderText: qsTr("Age")
                 //onTextChanged: backend.subjectAge = parseInt(subjectAge.text)
             }
 
+            Text {
+                id: sexLabel
+                text: "Sex:"
+                //anchors.top: subjectNameLabel.bottom
+                font.family: "Helvetica"
+                font.pointSize: 24
+                color: "black"
+            }
+
+            ComboBox {
+                id: sexCombo
+                model: ListModel {
+                    id: cbItems
+                    ListElement { text: "Male"; color: "Blue" }
+                    ListElement { text: "Female"; color: "Red" }
+                    ListElement { text: "Other"; color: "White" }
+                }
+
+        }
         }
     }
 
@@ -322,7 +339,7 @@ ApplicationWindow {
 
                     backend.connectAll()
 
-                    backend.subjectName = subjectName.text
+                    backend.subjectName = subjectID.text
                     backend.subjectAge = subjectAge.text
 
                     if (picturesFolderDialog.folder !== StandardPaths.PicturesLocation) {
