@@ -14,7 +14,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-    backend.cpp
+    backend.cpp \
+    nzmqtsubscriber.cpp
 
 RESOURCES += qml.qrc
 
@@ -29,5 +30,17 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
+INCLUDEPATH += /usr/local/include
+
+LIBS += -L/usr/local/include -L/usr/local/Cellar/zeromq/4.3.2/lib -L/usr/local/include/qmsgpack/ -L/usr/local/include -L/usr/local/lib -lzmq -lqmsgpack
+
+
 HEADERS += \
-    backend.h
+#/usr/local/include/zmq.hpp \
+#/usr/local/include/zmq.h \
+/usr/local/include \
+#./include/zmq.h \
+#./include/zmq.hpp \
+./include/nzmqt/nzmqt.hpp \
+    backend.h \
+    nzmqtsubscriber.h
