@@ -14,8 +14,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-    backend.cpp \
-    nzmqtsubscriber.cpp
+    backend.cpp
 
 RESOURCES += qml.qrc
 
@@ -42,5 +41,4 @@ HEADERS += \
 #./include/zmq.h \
 #./include/zmq.hpp \
 ./include/nzmqt/nzmqt.hpp \
-    backend.h \
-    nzmqtsubscriber.h
+    backend.h

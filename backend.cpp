@@ -1,6 +1,10 @@
 #include "backend.h"
 #include <QDebug>
 #include <QtSerialPort/QSerialPortInfo>
+#include <include/zhelpers.hpp>
+
+zmq::context_t contextAffectiva(1);
+zmq::socket_t subscriber(contextAffectiva, ZMQ_SUB);
 
 
 BackEnd::BackEnd(QObject *parent) : QObject(parent)
@@ -78,7 +82,7 @@ void BackEnd::setArduinoSensorsPath(const QString &arduinoSensorsPath)
 
 QString BackEnd::affectivaIP()
 {
-    return m_arduinoSensorsPath;
+    return m_affectivaIP;
 }
 
 void BackEnd::setAffectivaIP(const QString &affectivaIP)
@@ -179,15 +183,13 @@ void BackEnd::connectAll()
     buttonsPort->setPortName(arduinoButtonsPath());
     sensorsPort->setPortName(arduinoSensorsPath());
 
-    nzmqt::ZMQContext* context = nzmqt::createDefaultContext(this);
     QString address = "tcp://" + affectivaIP();
-    affectSub = new nzmqtSubscriber(*context, address, "", this);
-    connect(affectSub, SIGNAL(extractData(QVariant,QString)),this,SLOT(dataReceived(QVariant,QString)));
-    affectSub;
 
-    subscriber.connect("tcp://localhost:5555");
+    //subscriber.connect("tcp://192.168.1.17:5555");
+    qDebug() << address.toUtf8().constData();
+    subscriber.connect(address.toUtf8().constData());
     subscriber.setsockopt( ZMQ_SUBSCRIBE, "aff", 3);
-
+    qDebug() << "Subscriber connected? " << subscriber.connected();
 
     if (buttonsPort->open(QIODevice::ReadWrite))
       {
@@ -250,7 +252,12 @@ void BackEnd::handleButtonsTimeout(){
        // qDebug()<< "Buttons Val: " << QString(m_readButtons);
     }
     else {
-        qDebug() << "Haven't received data from Arduino Buttons module";
+       // qDebug() << "Haven't received data from Arduino Buttons module";
+
+
+
+        qDebug() << QString::fromStdString(s_recv (subscriber));
+
     }
 }
 
@@ -261,7 +268,7 @@ void BackEnd::handleSensorsTimeout(){
         qDebug()<< "Sensors Val: " << QString(m_readSensors);
     }
     else {
-        qDebug() << "Haven't received data from Arduino Sensors module";
+       // qDebug() << "Haven't received data from Arduino Sensors module";
     }
 }
 
@@ -271,32 +278,5 @@ void BackEnd::handleError(QSerialPort::SerialPortError serialPortError)
       //  qDebug(QObject::tr("An I/O error occurred while reading the data from port %1, error: %2").arg(serial->portName()).arg(serial->errorString()));
     }
 }
-
-
-void BackEnd::dataReceived(QVariant v,QString s)
-{
-
-
-        if(v.toString().length() != 0)
-        {
-        affectivaData = v.toString();
-        qDebug() << affectivaData;
-        }
-        /*affect[0] = affectiva.split(";").at(0) // anger
-        affect[1] = affectiva.split(";").at(1) // contempt
-        affect[2] = affectiva.split(";").at(2) // disgust
-        affect[3] = affectiva.split(" ").at(3) // engagement
-        affect[4] = affectiva.split(" ").at(4) // fear
-        affect[5] = affectiva.split(" ").at(5) // joy
-        affect[6] = affectiva.split(" ").at(6); // sadness
-        affect[7] = affectiva.split(" ").at(7) // surprise
-        affect[8] = affectiva.split(" ").at(8) // valence
-        affectAge = affectiva.split(" ").at(9)
-        affectGender =
-        */
-
-}
-
-
 
 
