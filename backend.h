@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QSerialPort>
 #include <QTimer>
+#include <zmq.hpp>
+#include "nzmqtsubscriber.h"
 
 class BackEnd : public QObject
 {
@@ -104,6 +106,15 @@ private:
 
     QTimer m_buttonsTimer;
     QTimer m_sensorsTimer;
+
+    zmq::context_t *contextAffectiva;
+    zmq::socket_t *subscriber;
+    nzmqtSubscriber *affectSub;
+
+    QString affectivaData;
+
+private slots:
+    void dataReceived(QVariant v,QString s);
 
 public slots:
 };

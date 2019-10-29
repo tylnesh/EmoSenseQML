@@ -130,7 +130,7 @@ ApplicationWindow {
             anchors.top: arduinoSensorsLabel.bottom
             anchors.left: affectivaLabel.right
             anchors.leftMargin: 20
-            text: backend.affectivaIP
+            text: "127.0.0.1:5555";
             placeholderText: qsTr("Affectiva IP")
         }
     }
@@ -155,7 +155,11 @@ ApplicationWindow {
             id: infoHeader
             text: "Enter information about subject:"
             wrapMode: Text.WrapAnywhere
-            anchors.horizontalCenter: parent.horizontalCenter
+            //anchors.horizontalCenter: parent.horizontalCenter
+            Layout.alignment: Qt.AlignCenter
+
+
+
             font.family: "Helvetica"
             font.pointSize: 32
             color: "black"
@@ -167,6 +171,8 @@ ApplicationWindow {
 
                 Text {
                     id: subjectIDLabel
+                    Layout.alignment: Qt.AlignCenter
+
                     text: "Name:"
                     font.family: "Helvetica"
                     font.pointSize: 24
@@ -175,11 +181,9 @@ ApplicationWindow {
 
                 TextField {
                     id: subjectID
-                    //anchors.leftMargin: 20
+                    Layout.alignment: Qt.AlignCenter
                     text: backend.subjectName
                     placeholderText: qsTr("Subject name")
-                    //onTextChanged: backend.subjectName = subjectName.text
-                    //onTextEdited: backend.subjectName = text
                 }
 
 
@@ -188,6 +192,8 @@ ApplicationWindow {
             Text {
                 id: ageLabel
                 text: "Age:"
+                Layout.alignment: Qt.AlignCenter
+
                 //anchors.top: subjectNameLabel.bottom
                 font.family: "Helvetica"
                 font.pointSize: 24
@@ -196,11 +202,15 @@ ApplicationWindow {
 
             TextField {
                 id: subjectAge
+                Layout.alignment: Qt.AlignCenter
 
                 text: backend.subjectAge
                 placeholderText: qsTr("Age")
                 //onTextChanged: backend.subjectAge = parseInt(subjectAge.text)
             }
+
+Row{
+    Layout.alignment: Qt.AlignCenter
 
             Text {
                 id: sexLabel
@@ -213,14 +223,10 @@ ApplicationWindow {
 
             ComboBox {
                 id: sexCombo
-                model: ListModel {
-                    id: cbItems
-                    ListElement { text: "Male"; color: "Blue" }
-                    ListElement { text: "Female"; color: "Red" }
-                    ListElement { text: "Other"; color: "White" }
-                }
+                model: [ "Male", "Female", "Other" ]
 
         }
+}
         }
     }
 

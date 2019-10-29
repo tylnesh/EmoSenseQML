@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <QtSerialPort/QSerialPortInfo>
 
+
 BackEnd::BackEnd(QObject *parent) : QObject(parent)
 {
 
@@ -173,10 +174,20 @@ QStringList BackEnd::availablePorts()
 void BackEnd::connectAll()
 {
     buttonsPort = new QSerialPort();
-    sensorsPort = new QSerialPort();
+    sensorsPort = new QSerialPort();    
 
     buttonsPort->setPortName(arduinoButtonsPath());
     sensorsPort->setPortName(arduinoSensorsPath());
+
+    nzmqt::ZMQContext* context = nzmqt::createDefaultContext(this);
+    QString address = "tcp://" + affectivaIP();
+    affectSub = new nzmqtSubscriber(*context, address, "", this);
+    connect(affectSub, SIGNAL(extractData(QVariant,QString)),this,SLOT(dataReceived(QVariant,QString)));
+    affectSub;
+
+    subscriber.connect("tcp://localhost:5555");
+    subscriber.setsockopt( ZMQ_SUBSCRIBE, "aff", 3);
+
 
     if (buttonsPort->open(QIODevice::ReadWrite))
       {
@@ -259,6 +270,31 @@ void BackEnd::handleError(QSerialPort::SerialPortError serialPortError)
     if (serialPortError == QSerialPort::ReadError) {
       //  qDebug(QObject::tr("An I/O error occurred while reading the data from port %1, error: %2").arg(serial->portName()).arg(serial->errorString()));
     }
+}
+
+
+void BackEnd::dataReceived(QVariant v,QString s)
+{
+
+
+        if(v.toString().length() != 0)
+        {
+        affectivaData = v.toString();
+        qDebug() << affectivaData;
+        }
+        /*affect[0] = affectiva.split(";").at(0) // anger
+        affect[1] = affectiva.split(";").at(1) // contempt
+        affect[2] = affectiva.split(";").at(2) // disgust
+        affect[3] = affectiva.split(" ").at(3) // engagement
+        affect[4] = affectiva.split(" ").at(4) // fear
+        affect[5] = affectiva.split(" ").at(5) // joy
+        affect[6] = affectiva.split(" ").at(6); // sadness
+        affect[7] = affectiva.split(" ").at(7) // surprise
+        affect[8] = affectiva.split(" ").at(8) // valence
+        affectAge = affectiva.split(" ").at(9)
+        affectGender =
+        */
+
 }
 
 
