@@ -21,6 +21,7 @@ class BackEnd : public QObject
 
     Q_PROPERTY(bool isPicturesSelected READ isPicturesSelected WRITE setIsPicturesSelected NOTIFY isPicturesSelectedChanged)
     Q_PROPERTY(bool isVideosSelected READ isVideosSelected WRITE setIsVideosSelected NOTIFY isVideosSelectedChanged)
+    Q_PROPERTY(QString currentPicture READ currentPicture WRITE setCurrentPicture NOTIFY currentPictureChanged)
 
 
 
@@ -38,6 +39,8 @@ public:
     QString picturesFolderPath();
     QString videosFolderPath();
 
+    QString currentPicture();
+
     bool isPicturesSelected();
     bool isVideosSelected();
 
@@ -54,6 +57,8 @@ public:
     void setIsPicturesSelected(const bool &isPicturesSelected);
     void setIsVideosSelected(const bool &isVideosSelected);
 
+    void setCurrentPicture(const QString &currentPicture);
+
     Q_INVOKABLE QStringList availablePorts();
     Q_INVOKABLE void connectAll();
 
@@ -64,6 +69,8 @@ public:
     void handleButtonsTimeout();
     void handleSensorsTimeout();
     void handleAffectivaTimeout();
+
+    void handleWriting();
 
     void handleError(QSerialPort::SerialPortError error);
 
@@ -82,6 +89,8 @@ signals:
     void isPicturesSelectedChanged();
     void isVideosSelectedChanged();
 
+    void currentPictureChanged();
+
 private:
     QString m_subjectName;
     int m_subjectAge = 0;
@@ -92,6 +101,8 @@ private:
 
     QString m_picturesFolderPath;
     QString m_videosFolderPath;
+
+    QString m_currentPicture;
 
     bool m_isPicturesSelected = false;
     bool m_isVideosSelected = false;

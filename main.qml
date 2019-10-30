@@ -411,6 +411,7 @@ Row{
             repeat: true
             onTriggered: {
                 currentImage.source = picturesModel.get(i, "fileURL")
+                backend.currentPicture = picturesModel.get(i, "fileURL")
                 if (++i == picturesModel.count) {
                     i = 0
                     running = false

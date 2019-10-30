@@ -2,9 +2,15 @@
 #include <QDebug>
 #include <QtSerialPort/QSerialPortInfo>
 #include <include/zhelpers.hpp>
+#include <QFile>
+#include <QDateTime>
+#include <QTime>
 
 zmq::context_t contextAffectiva(1);
 zmq::socket_t subscriber(contextAffectiva, ZMQ_SUB);
+QString filename="";
+QFile measurement;
+
 
 
 BackEnd::BackEnd(QObject *parent) : QObject(parent)
@@ -119,6 +125,12 @@ QString BackEnd::videosFolderPath()
     return m_videosFolderPath;
 }
 
+QString BackEnd::currentPicture()
+{
+
+    return m_currentPicture;
+}
+
 void BackEnd::setVideosFolderPath(const QString &videosFolderPath)
 {
     if (videosFolderPath == m_videosFolderPath)
@@ -127,6 +139,16 @@ void BackEnd::setVideosFolderPath(const QString &videosFolderPath)
     m_videosFolderPath = videosFolderPath;
     qDebug() << "Videos Folder Path: " << m_videosFolderPath;
     emit videosFolderPathChanged();
+}
+
+void BackEnd::setCurrentPicture(const QString &currentPicture)
+{
+    if (currentPicture == m_currentPicture)
+        return;
+
+    m_currentPicture = currentPicture;
+    qDebug() << "Current Picture: " << m_currentPicture;
+    emit currentPictureChanged();
 }
 
 
@@ -227,6 +249,29 @@ void BackEnd::connectAll()
        //m_sensorsTimer.start(20);
 
        } else qDebug("Sensors Port: Connection Error");
+
+
+
+    QDateTime UTC(QDateTime::currentDateTimeUtc());
+        QDateTime local(UTC);
+
+
+
+         measurement.setFileName("emotion_pictures_" + local.toString() +".csv");
+         measurement.open(QIODevice::ReadWrite);
+
+
+         QTextStream measurementHeader( &measurement );
+        measurementHeader << "id;age;sex;joy;fear;disgust;sadness;anger;surprise;contempt;valence;engagement;affectivaGender; affectivaAgeGroup; GSR;HR;Temperature;Valence;Picture;Picture Valence;Time Elapsed" << endl;
+
+
+    connect(&m_fileWriterTimer, &QTimer::timeout, this, &BackEnd::handleWriting);
+    m_fileWriterTimer.start(20);
+
+
+
+
+
 }
 
 void BackEnd::readButtons()
@@ -249,8 +294,8 @@ void BackEnd::readAffectiva()
 {
 
     m_readAffectiva = QString::fromStdString(s_recv(subscriber).data()) ;
-       if (!m_sensorsTimer.isActive())
-           m_sensorsTimer.start(20);
+       if (!m_affectivaTimer.isActive())
+           m_affectivaTimer.start(20);
 }
 
 
@@ -296,6 +341,17 @@ void BackEnd::handleError(QSerialPort::SerialPortError serialPortError)
     if (serialPortError == QSerialPort::ReadError) {
       //  qDebug(QObject::tr("An I/O error occurred while reading the data from port %1, error: %2").arg(serial->portName()).arg(serial->errorString()));
     }
+}
+
+void BackEnd::handleWriting() {
+
+    static QTime time(QTime::currentTime());
+
+    QTextStream measurementStream( &measurement );
+
+    measurementStream << m_readAffectiva << m_readSensors << ";" << m_readButtons << currentPicture() << ";" << time.elapsed() << endl;
+
+
 }
 
 
