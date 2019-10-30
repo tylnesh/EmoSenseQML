@@ -184,12 +184,13 @@ void BackEnd::connectAll()
     sensorsPort->setPortName(arduinoSensorsPath());
 
     QString address = "tcp://" + affectivaIP();
-
-    //subscriber.connect("tcp://192.168.1.17:5555");
-    qDebug() << address.toUtf8().constData();
     subscriber.connect(address.toUtf8().constData());
     subscriber.setsockopt( ZMQ_SUBSCRIBE, "aff", 3);
     qDebug() << "Subscriber connected? " << subscriber.connected();
+    connect(&m_affectivaTimer, &QTimer::timeout, this, &BackEnd::readAffectiva);
+    m_affectivaTimer.start(20);
+
+
 
     if (buttonsPort->open(QIODevice::ReadWrite))
       {
@@ -204,8 +205,8 @@ void BackEnd::connectAll()
        connect(buttonsPort, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
                        this, &BackEnd::handleError);
 
-       connect(&m_buttonsTimer, &QTimer::timeout, this, &BackEnd::handleButtonsTimeout);
-       m_buttonsTimer.start(20);
+       //connect(&m_buttonsTimer, &QTimer::timeout, this, &BackEnd::handleButtonsTimeout);
+       //m_buttonsTimer.start(20);
 
        } else qDebug("Button Port: Connection Error");
 
@@ -222,8 +223,8 @@ void BackEnd::connectAll()
        connect(sensorsPort, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
                        this, &BackEnd::handleError);
 
-       connect(&m_sensorsTimer, &QTimer::timeout, this, &BackEnd::handleSensorsTimeout);
-       m_sensorsTimer.start(20);
+       //connect(&m_sensorsTimer, &QTimer::timeout, this, &BackEnd::handleSensorsTimeout);
+       //m_sensorsTimer.start(20);
 
        } else qDebug("Sensors Port: Connection Error");
 }
@@ -231,7 +232,7 @@ void BackEnd::connectAll()
 void BackEnd::readButtons()
 {
 
-    m_readButtons.append(buttonsPort->readAll());
+    m_readButtons =  QString(buttonsPort->readAll());
        if (!m_buttonsTimer.isActive())
            m_buttonsTimer.start(20);
 }
@@ -239,24 +240,30 @@ void BackEnd::readButtons()
 void BackEnd::readSensors()
 {
 
-    m_readSensors.append(sensorsPort->readAll());
+    m_readSensors = QString(sensorsPort->readAll());
        if (!m_sensorsTimer.isActive())
            m_sensorsTimer.start(20);
 }
+
+void BackEnd::readAffectiva()
+{
+
+    m_readAffectiva = QString::fromStdString(s_recv(subscriber).data()) ;
+       if (!m_sensorsTimer.isActive())
+           m_sensorsTimer.start(20);
+}
+
 
 
 void BackEnd::handleButtonsTimeout(){
 
     if(!m_readButtons.isEmpty())
     {
-       // qDebug()<< "Buttons Val: " << QString(m_readButtons);
+        qDebug()<< "Buttons Val: " << m_readButtons;
     }
     else {
        // qDebug() << "Haven't received data from Arduino Buttons module";
-
-
-
-        qDebug() << QString::fromStdString(s_recv (subscriber));
+      //  qDebug() << QString::fromStdString(s_recv (subscriber));
 
     }
 }
@@ -265,12 +272,24 @@ void BackEnd::handleSensorsTimeout(){
 
     if(!m_readSensors.isEmpty())
     {
-        qDebug()<< "Sensors Val: " << QString(m_readSensors);
+        qDebug()<< "Sensors Val: " << m_readSensors;
     }
     else {
        // qDebug() << "Haven't received data from Arduino Sensors module";
     }
 }
+
+void BackEnd::handleAffectivaTimeout(){
+
+    if(!m_readAffectiva.isEmpty())
+    {
+        qDebug()<< "Affectiva: " << QString(m_readAffectiva);
+    }
+    else {
+       // qDebug() << "Haven't received data from Arduino Sensors module";
+    }
+}
+
 
 void BackEnd::handleError(QSerialPort::SerialPortError serialPortError)
 {

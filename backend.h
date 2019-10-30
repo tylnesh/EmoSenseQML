@@ -59,8 +59,12 @@ public:
 
     void readButtons();
     void readSensors();
+    void readAffectiva();
+
     void handleButtonsTimeout();
     void handleSensorsTimeout();
+    void handleAffectivaTimeout();
+
     void handleError(QSerialPort::SerialPortError error);
 
 
@@ -100,11 +104,14 @@ private:
     QByteArray sensorsData;
 
 
-    QByteArray  m_readButtons;
-    QByteArray m_readSensors;
+    QString  m_readButtons;
+    QString m_readSensors;
+    QString m_readAffectiva;
 
     QTimer m_buttonsTimer;
     QTimer m_sensorsTimer;
+    QTimer m_affectivaTimer;
+    QTimer m_fileWriterTimer;
 
     zmq::context_t *contextAffectiva;
 
