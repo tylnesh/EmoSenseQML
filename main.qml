@@ -15,9 +15,6 @@ ApplicationWindow {
     height: 1080
     minimumWidth: 1100
     title: qsTr("EmoSense QML Edition")
-
-
-
     property int i: 0
 
     Playlist {
@@ -57,6 +54,7 @@ ApplicationWindow {
             color: "black"
         }
     }
+
     Rectangle {
         id: inputRectangle
         anchors.left: parent.left
@@ -65,41 +63,51 @@ ApplicationWindow {
         height: parent.height - titleRectangle.height - bottomRectangle.height
         color: "#eeeeee"
 
-        Text {
+
+        ColumnLayout{
+
+            spacing: 50
+
+
+
+            Text {
             id: inputHeader
             text: "Select inputs:"
-            anchors.horizontalCenter: parent.horizontalCenter
+            //anchors.horizontalCenter: parent.horizontalCenter
             font.family: "Helvetica"
             font.pointSize: 32
             color: "black"
         }
 
+
+             Row {
         Text {
             id: arduinoButtonsLabel
             text: "Buttons Path:"
-            anchors.top: inputHeader.bottom
+            //anchors.top: inputHeader.bottom
             font.family: "Helvetica"
             font.pointSize: 24
             color: "black"
         }
 
+
         ComboBox {
             id: arduinoButtonsPath
-            anchors.top: inputHeader.bottom
-            anchors.left: arduinoButtonsLabel.right
-            anchors.leftMargin: 20
+            //anchors.top: inputHeader.bottom
+            //anchors.left: arduinoButtonsLabel.right
+            //anchors.leftMargin: 20
             model : backend.availablePorts()
             onAccepted: {
                  console.log(currentText)
             }
         }
+}
 
-
-
+Row{
         Text {
             id: arduinoSensorsLabel
             text: "Sensors Path:"
-            anchors.top: arduinoButtonsLabel.bottom
+            //anchors.top: arduinoButtonsLabel.bottom
             font.family: "Helvetica"
             font.pointSize: 24
             color: "black"
@@ -107,19 +115,22 @@ ApplicationWindow {
 
         ComboBox {
             id: arduinoSensorsPath
-            anchors.top: arduinoButtonsLabel.bottom
-            anchors.left: arduinoSensorsLabel.right
-            anchors.leftMargin: 20
+            //anchors.top: arduinoButtonsLabel.bottom
+            //anchors.left: arduinoSensorsLabel.right
+            //anchors.leftMargin: 20
             model : backend.availablePorts()
             onAccepted: {
                 console.log(currentText)
             }
         }
+}
+
+Row{
 
         Text {
             id: affectivaLabel
             text: "Affectiva IP:"
-            anchors.top: arduinoSensorsLabel.bottom
+            //anchors.top: arduinoSensorsLabel.bottom
             font.family: "Helvetica"
             font.pointSize: 24
             color: "black"
@@ -127,11 +138,13 @@ ApplicationWindow {
 
         TextField {
             id: affectivaIP
-            anchors.top: arduinoSensorsLabel.bottom
-            anchors.left: affectivaLabel.right
-            anchors.leftMargin: 20
+            //anchors.top: arduinoSensorsLabel.bottom
+            ///anchors.left: affectivaLabel.right
+            //anchors.leftMargin: 20
             text: "127.0.0.1:5555";
             placeholderText: qsTr("Affectiva IP")
+        }
+    }
         }
     }
 
@@ -254,6 +267,7 @@ Row{
             }
 
             MouseArea {
+                id: picturesChooserMouseArea
                 anchors.fill: parent
                 onClicked: picturesFolderDialog.open()
             }
@@ -266,6 +280,8 @@ Row{
                 onAccepted: {
                     console.log("You chose: " + picturesFolderDialog.folder)
                     backend.isPicturesSelected = true
+                    videosChooserRectangle.color = "black"
+                    videosChooserMouseArea.enabled = false
                 }
                 onRejected: {
                     console.log("Canceled")
@@ -289,6 +305,7 @@ Row{
             }
 
             MouseArea {
+                id: videosChooserMouseArea
                 anchors.fill: parent
                 onClicked: videosFolderDialog.open()
             }
@@ -383,8 +400,6 @@ Row{
 
     Window {
         id: slideshow
-        width: 1920
-        height: 1080
         color: "black"
 
         FolderListModel {
@@ -435,6 +450,10 @@ Row{
 
             focus: true
             Keys.onEscapePressed: {
+                picturesChooserRectangle.color = "lightblue"
+                picturesChooserMouseArea.enabled = true
+                videosChooserRectangle.color = "lightgreen"
+                videosChooserMouseArea.enabled = true
                 videoPlayer.stop()
                 slideshowTimer.stop()
                 slideshow.close()
@@ -445,5 +464,7 @@ Row{
             Keys.onLeftPressed: videoPlayer.seek(videoPlayer.position - 3000)
             Keys.onRightPressed: videoPlayer.seek(videoPlayer.position + 5000)
         }
+
+
     }
 }

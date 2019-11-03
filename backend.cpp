@@ -208,11 +208,11 @@ void BackEnd::connectAll()
     QString address = "tcp://" + affectivaIP();
     subscriber.connect(address.toUtf8().constData());
     subscriber.setsockopt( ZMQ_SUBSCRIBE, "aff", 3);
+
+
     qDebug() << "Subscriber connected? " << subscriber.connected();
     connect(&m_affectivaTimer, &QTimer::timeout, this, &BackEnd::readAffectiva);
-    m_affectivaTimer.start(20);
-
-
+    m_affectivaTimer.start(20);     
 
     if (buttonsPort->open(QIODevice::ReadWrite))
       {
@@ -226,11 +226,8 @@ void BackEnd::connectAll()
        connect(buttonsPort, &QSerialPort::readyRead, this, &BackEnd::readButtons);
        connect(buttonsPort, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
                        this, &BackEnd::handleError);
-
-       //connect(&m_buttonsTimer, &QTimer::timeout, this, &BackEnd::handleButtonsTimeout);
-       //m_buttonsTimer.start(20);
-
        } else qDebug("Button Port: Connection Error");
+
 
     if (sensorsPort->open(QIODevice::ReadWrite))
       {
@@ -240,24 +237,19 @@ void BackEnd::connectAll()
        sensorsPort->setStopBits(QSerialPort::OneStop);
        sensorsPort->setFlowControl(QSerialPort::NoFlowControl);
        qDebug("Sensors Port: Connection established");
-
        connect(sensorsPort, &QSerialPort::readyRead, this, &BackEnd::readSensors);
        connect(sensorsPort, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
                        this, &BackEnd::handleError);
-
-       //connect(&m_sensorsTimer, &QTimer::timeout, this, &BackEnd::handleSensorsTimeout);
-       //m_sensorsTimer.start(20);
-
        } else qDebug("Sensors Port: Connection Error");
 
 
 
-    QDateTime UTC(QDateTime::currentDateTimeUtc());
+        QDateTime UTC(QDateTime::currentDateTimeUtc());
         QDateTime local(UTC);
 
 
 
-         measurement.setFileName("emotion_pictures_" + local.toString() +".csv");
+         measurement.setFileName("./emotion_pictures_" + local.toString() +".csv");
          measurement.open(QIODevice::ReadWrite);
 
 

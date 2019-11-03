@@ -31,14 +31,9 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 INCLUDEPATH += /usr/local/include
 
-LIBS += -L/usr/local/include -L/usr/local/Cellar/zeromq/4.3.2/lib -L/usr/local/include/qmsgpack/ -L/usr/local/include -L/usr/local/lib -lzmq -lqmsgpack
+LIBS += -L/usr/local/include -L/usr/local/Cellar/zeromq/4.3.2/lib -L/usr/local/include/qmsgpack/ -L/usr/local/include -L/usr/local/lib -lzmq
 
 
 HEADERS += \
-#/usr/local/include/zmq.hpp \
-#/usr/local/include/zmq.h \
 /usr/local/include \
-#./include/zmq.h \
-#./include/zmq.hpp \
-./include/nzmqt/nzmqt.hpp \
     backend.h
