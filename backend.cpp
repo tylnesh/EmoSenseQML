@@ -18,6 +18,23 @@ BackEnd::BackEnd(QObject *parent) : QObject(parent)
 
 }
 
+int BackEnd::pictureCount()
+{
+    return m_pictureCount;
+}
+
+void BackEnd::setPictureCount(const int &pictureCount)
+{
+    if (pictureCount == m_pictureCount)
+        return;
+
+    m_pictureCount = pictureCount;
+    qDebug() << "Picture count: " << m_pictureCount;
+    emit pictureCountChanged();
+}
+
+
+
 QString BackEnd::subjectName()
 {
     return m_subjectName;
@@ -199,6 +216,9 @@ QStringList BackEnd::availablePorts()
 
 void BackEnd::connectAll()
 {
+
+
+
     buttonsPort = new QSerialPort();
     sensorsPort = new QSerialPort();    
 
@@ -346,4 +366,16 @@ void BackEnd::handleWriting() {
 
 }
 
+QList<int> BackEnd::getShuffledIndexes(){
 
+    QList<int> indexes;
+    for (int i = 0; i<pictureCount(); i++) indexes.append(i);
+    std::random_shuffle(indexes.begin(),indexes.end());
+    qDebug() << indexes;
+    return indexes;
+
+}
+
+void BackEnd::shuffleIndexes(){
+    indexes.append(getShuffledIndexes());
+}

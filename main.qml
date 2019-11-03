@@ -16,6 +16,7 @@ ApplicationWindow {
     minimumWidth: 1100
     title: qsTr("EmoSense QML Edition")
     property int i: 0
+    property var indexes
 
     Playlist {
         id: videoPlaylist
@@ -40,7 +41,7 @@ ApplicationWindow {
         anchors.top: parent.top
         width: parent.width
         height: 200
-        color: "#aaaaaa"
+        color: "#eeeeee"
 
         Text {
             x: 450
@@ -61,8 +62,7 @@ ApplicationWindow {
         anchors.top: titleRectangle.bottom
         width: parent.width / 3
         height: parent.height - titleRectangle.height - bottomRectangle.height
-        color: "#eeeeee"
-
+        color: "#fefefe"
 
         ColumnLayout{
 
@@ -360,7 +360,7 @@ Row{
                     backend.arduinoSensorsPath = arduinoSensorsPath.currentText
                     backend.affectivaIP = affectivaIP.text
 
-                    backend.connectAll()
+                    //backend.connectAll()
 
                     backend.subjectName = subjectID.text
                     backend.subjectAge = subjectAge.text
@@ -379,6 +379,13 @@ Row{
                         slideshow.visible = true
                         slideshow.visibility = "FullScreen"
                         slideshowTimer.running = true
+
+                        //TODO: figure out why passing qlist doesn't work
+
+                        backend.pictureCount = picturesModel.rowCount()
+                        backend.shuffleIndexes()
+                        indexes = backend.indexes
+                        console.log(indexes)
                         console.log(backend.availablePorts())
                     }
 
@@ -425,8 +432,10 @@ Row{
             interval: 5000
             repeat: true
             onTriggered: {
-                currentImage.source = picturesModel.get(i, "fileURL")
-                backend.currentPicture = picturesModel.get(i, "fileURL")
+
+
+                currentImage.source = picturesModel.get(indexes[i], "fileURL")
+                backend.currentPicture = picturesModel.get(indexes[i], "fileURL")
                 if (++i == picturesModel.count) {
                     i = 0
                     running = false

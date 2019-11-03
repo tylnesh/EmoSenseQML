@@ -23,11 +23,18 @@ class BackEnd : public QObject
     Q_PROPERTY(bool isVideosSelected READ isVideosSelected WRITE setIsVideosSelected NOTIFY isVideosSelectedChanged)
     Q_PROPERTY(QString currentPicture READ currentPicture WRITE setCurrentPicture NOTIFY currentPictureChanged)
 
+    Q_PROPERTY(int pictureCount READ pictureCount WRITE setPictureCount NOTIFY pictureCountChanged)
+
+    Q_PROPERTY(QList<int> indexes READ indexes)
+
 
 
 
 public:
     explicit BackEnd(QObject *parent = nullptr);
+
+    int pictureCount();
+    QList<int> indexes;
 
     QString subjectName();
     int subjectAge();
@@ -43,6 +50,8 @@ public:
 
     bool isPicturesSelected();
     bool isVideosSelected();
+
+    void setPictureCount(const int &pictureCount);
 
     void setSubjectName(const QString &subjectName);
     void setSubjectAge(const int &subjectAge);
@@ -61,6 +70,7 @@ public:
 
     Q_INVOKABLE QStringList availablePorts();
     Q_INVOKABLE void connectAll();
+    Q_INVOKABLE void shuffleIndexes();
 
     void readButtons();
     void readSensors();
@@ -74,8 +84,15 @@ public:
 
     void handleError(QSerialPort::SerialPortError error);
 
+    QList<int> getShuffledIndexes();
+
+
+
+
 
 signals:
+
+    void pictureCountChanged();
     void subjectNameChanged();
     void subjectAgeChanged();
 
@@ -92,6 +109,8 @@ signals:
     void currentPictureChanged();
 
 private:
+
+    int m_pictureCount = 0;
     QString m_subjectName;
     int m_subjectAge = 0;
 
@@ -138,3 +157,5 @@ public slots:
 };
 
 #endif // BACKEND_H
+
+
