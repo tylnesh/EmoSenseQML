@@ -70,7 +70,7 @@ public:
 
     Q_INVOKABLE QStringList availablePorts();
     Q_INVOKABLE void connectAll();
-    Q_INVOKABLE void shuffleIndexes();
+    Q_INVOKABLE QList<int> shuffleIndexes();
 
     void readButtons();
     void readSensors();

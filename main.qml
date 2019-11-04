@@ -383,8 +383,8 @@ Row{
                         //TODO: figure out why passing qlist doesn't work
 
                         backend.pictureCount = picturesModel.rowCount()
-                        backend.shuffleIndexes()
-                        indexes = backend.indexes
+
+                        indexes = backend.shuffleIndexes()
                         console.log(indexes)
                         console.log(backend.availablePorts())
                     }

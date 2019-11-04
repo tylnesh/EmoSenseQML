@@ -368,14 +368,22 @@ void BackEnd::handleWriting() {
 
 QList<int> BackEnd::getShuffledIndexes(){
 
-    QList<int> indexes;
-    for (int i = 0; i<pictureCount(); i++) indexes.append(i);
-    std::random_shuffle(indexes.begin(),indexes.end());
-    qDebug() << indexes;
-    return indexes;
+    QList<int> ind;
+    for (int i = 0; i<pictureCount(); i++) ind.append(i);
+    std::random_shuffle(ind.begin(),ind.end());
+    //qDebug() << indexes;
+
+
+
+    QList<int> newList(ind.mid(0,100));
+
+
+    return newList;
 
 }
 
-void BackEnd::shuffleIndexes(){
+QList<int> BackEnd::shuffleIndexes(){
     indexes.append(getShuffledIndexes());
+    qDebug() << "indexes: " << indexes;
+    return indexes;
 }
