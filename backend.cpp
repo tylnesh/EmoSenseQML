@@ -5,6 +5,8 @@
 #include <QFile>
 #include <QDateTime>
 #include <QTime>
+#include <random>
+#include <ctime>
 
 zmq::context_t contextAffectiva(1);
 zmq::socket_t subscriber(contextAffectiva, ZMQ_SUB);
@@ -363,10 +365,13 @@ void BackEnd::handleWriting() {
 
 QList<int> BackEnd::getShuffledIndexes(){
 
+    std::random_device rd;
+        std::mt19937 g(rd());
+
     QList<int> ind;
     for (int i = 0; i<pictureCount(); i++) ind.append(i);
-    std::random_shuffle(ind.begin(),ind.end());
-    //qDebug() << indexes;
+    std::shuffle(ind.begin(),ind.end(),g);
+    qDebug() << "getShuffledIndexes() :" << ind;
 
 
 
