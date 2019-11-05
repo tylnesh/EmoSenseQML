@@ -9,8 +9,10 @@
 class BackEnd : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString subjectName READ subjectName WRITE setSubjectName NOTIFY subjectNameChanged)
+    Q_PROPERTY(QString subjectId READ subjectId WRITE setSubjectId NOTIFY subjectIdChanged)
     Q_PROPERTY(int subjectAge READ subjectAge WRITE setSubjectAge NOTIFY subjectAgeChanged)
+    Q_PROPERTY(QString subjectSex READ subjectSex WRITE setSubjectSex NOTIFY subjectSexChanged)
+
 
     Q_PROPERTY(QString arduinoButtonsPath READ arduinoButtonsPath WRITE setArduinoButtonsPath NOTIFY arduinoButtonsPathChanged)
     Q_PROPERTY(QString arduinoSensorsPath READ arduinoSensorsPath WRITE setArduinoSensorsPath NOTIFY arduinoSensorsPathChanged)
@@ -25,7 +27,7 @@ class BackEnd : public QObject
 
     Q_PROPERTY(int pictureCount READ pictureCount WRITE setPictureCount NOTIFY pictureCountChanged)
 
-    Q_PROPERTY(QList<int> indexes READ indexes)
+    //Q_PROPERTY(QList<int> indexes READ indexes)
 
 
 
@@ -34,10 +36,11 @@ public:
     explicit BackEnd(QObject *parent = nullptr);
 
     int pictureCount();
-    QList<int> indexes;
+    //QList<int> indexes;
 
-    QString subjectName();
+    QString subjectId();
     int subjectAge();
+    QString subjectSex();
 
     QString arduinoButtonsPath();
     QString arduinoSensorsPath();
@@ -53,8 +56,9 @@ public:
 
     void setPictureCount(const int &pictureCount);
 
-    void setSubjectName(const QString &subjectName);
+    void setSubjectId(const QString &subjectId);
     void setSubjectAge(const int &subjectAge);
+    void setSubjectSex(const QString &subjectSex);
 
     void setArduinoButtonsPath(const QString &arduinoButtonsPath);
     void setArduinoSensorsPath(const QString &arduinoSensorsPath);
@@ -76,15 +80,11 @@ public:
     void readSensors();
     void readAffectiva();
 
-    void handleButtonsTimeout();
-    void handleSensorsTimeout();
-    void handleAffectivaTimeout();
-
     void handleWriting();
 
     void handleError(QSerialPort::SerialPortError error);
 
-    QList<int> getShuffledIndexes();
+   Q_INVOKABLE QList<int> getShuffledIndexes();
 
 
 
@@ -93,8 +93,9 @@ public:
 signals:
 
     void pictureCountChanged();
-    void subjectNameChanged();
+    void subjectIdChanged();
     void subjectAgeChanged();
+    void subjectSexChanged();
 
     void arduinoButtonsPathChanged();
     void arduinoSensorsPathChanged();
@@ -111,8 +112,9 @@ signals:
 private:
 
     int m_pictureCount = 0;
-    QString m_subjectName;
+    QString m_subjectId;
     int m_subjectAge = 0;
+    QString m_subjectSex;
 
     QString m_arduinoButtonsPath;
     QString m_arduinoSensorsPath;
@@ -134,9 +136,9 @@ private:
     QByteArray sensorsData;
 
 
-    QString  m_readButtons;
-    QString m_readSensors;
-    QString m_readAffectiva;
+    QString  m_readButtons = "NaN";
+    QString m_readSensors = "NaN;NaN;NaN";
+    QString m_readAffectiva = "NaN;NaN;NaN;NaN;NaN;NaN;NaN;NaN;NaN;NaN;NaN";
 
     QTimer m_buttonsTimer;
     QTimer m_sensorsTimer;

@@ -186,7 +186,7 @@ Row{
                     id: subjectIDLabel
                     Layout.alignment: Qt.AlignCenter
 
-                    text: "Name:"
+                    text: "Id:"
                     font.family: "Helvetica"
                     font.pointSize: 24
                     color: "black"
@@ -195,8 +195,10 @@ Row{
                 TextField {
                     id: subjectID
                     Layout.alignment: Qt.AlignCenter
-                    text: backend.subjectName
-                    placeholderText: qsTr("Subject name")
+                    text: backend.subjectId
+
+
+                    placeholderText: qsTr("Subject id")
                 }
 
 
@@ -235,7 +237,7 @@ Row{
             }
 
             ComboBox {
-                id: sexCombo
+                id: subjectSexCombo
                 model: [ "Male", "Female", "Other" ]
 
         }
@@ -360,10 +362,13 @@ Row{
                     backend.arduinoSensorsPath = arduinoSensorsPath.currentText
                     backend.affectivaIP = affectivaIP.text
 
-                    //backend.connectAll()
-
-                    backend.subjectName = subjectID.text
+                    backend.subjectId = subjectID.text
                     backend.subjectAge = subjectAge.text
+                    backend.subjectSex = subjectSexCombo.currentText
+
+
+                    backend.connectAll()
+
 
                     if (picturesFolderDialog.folder !== StandardPaths.PicturesLocation) {
                         backend.picturesFolderPath = picturesFolderDialog.folder
@@ -380,12 +385,10 @@ Row{
                         slideshow.visibility = "FullScreen"
                         slideshowTimer.running = true
 
-                        //TODO: figure out why passing qlist doesn't work
-
                         backend.pictureCount = picturesModel.rowCount()
 
                         indexes = backend.shuffleIndexes()
-                        console.log(indexes)
+                        //console.log(indexes)
                         console.log(backend.availablePorts())
                     }
 

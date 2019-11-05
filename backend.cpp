@@ -35,19 +35,19 @@ void BackEnd::setPictureCount(const int &pictureCount)
 
 
 
-QString BackEnd::subjectName()
+QString BackEnd::subjectId()
 {
-    return m_subjectName;
+    return m_subjectId;
 }
 
-void BackEnd::setSubjectName(const QString &subjectName)
+void BackEnd::setSubjectId(const QString &subjectId)
 {
-    if (subjectName == m_subjectName)
+    if (subjectId == m_subjectId)
         return;
 
-    m_subjectName = subjectName;
-    qDebug() << "Subject Name: " << m_subjectName;
-    emit subjectNameChanged();
+    m_subjectId = subjectId;
+    qDebug() << "Subject Name: " << m_subjectId;
+    emit subjectIdChanged();
 }
 
 
@@ -64,6 +64,20 @@ void BackEnd::setSubjectAge(const int &subjectAge)
     m_subjectAge = subjectAge;
     qDebug() << "Subject Age: " << m_subjectAge;
     emit subjectAgeChanged();
+}
+
+QString BackEnd::subjectSex()
+{
+    return m_subjectSex;
+}
+
+void BackEnd::setSubjectSex(const QString &subjectSex){
+    if (subjectSex == m_subjectSex)
+        return;
+
+    m_subjectSex = subjectSex;
+    qDebug() << "Subject sex: " << m_subjectSex;
+    emit subjectSexChanged();
 }
 
 //Getters/Setters for Arduino Buttons Path
@@ -268,14 +282,22 @@ void BackEnd::connectAll()
         QDateTime local(UTC);
 
 
+    if(isPicturesSelected()){
+        measurement.setFileName("./emotion_pictures_" + local.toString() +".csv");
+        measurement.open(QIODevice::ReadWrite);
+        QTextStream measurementHeader( &measurement );
+        measurementHeader << "id;age;sex;"<< endl;
+        measurementHeader << subjectId() <<";"<< subjectAge() <<";"<< subjectSex() << endl;
+        measurementHeader << "joy;fear;disgust;sadness;anger;surprise;contempt;valence;engagement;affectivaAgeGroup;affectivaGender;GSR;HR;Temperature;Button Valence;Psychologist Valence;Filename;Timestamp;TimeReacted" << endl;
+}
 
-         measurement.setFileName("./emotion_pictures_" + local.toString() +".csv");
-         measurement.open(QIODevice::ReadWrite);
-
-
-         QTextStream measurementHeader( &measurement );
-        measurementHeader << "id;age;sex;joy;fear;disgust;sadness;anger;surprise;contempt;valence;engagement;affectivaGender; affectivaAgeGroup; GSR;HR;Temperature;Valence;Picture;Picture Valence;Time Elapsed" << endl;
-
+    if(isVideosSelected()){
+        measurement.setFileName("./emotion_videos_" + local.toString() +".csv");
+        measurement.open(QIODevice::ReadWrite);
+        QTextStream measurementHeader( &measurement );
+        measurementHeader << "id;age;sex;"<< endl;
+        measurementHeader << "joy;fear;disgust;sadness;anger;surprise;contempt;valence;engagement;affectivaAgeGroup;affectivaGender;GSR;HR;Temperature;Button Valence;Psychologist Valence;Filename;Timestamp;TimeReacted" << endl;
+}
 
     connect(&m_fileWriterTimer, &QTimer::timeout, this, &BackEnd::handleWriting);
     m_fileWriterTimer.start(20);
@@ -288,64 +310,35 @@ void BackEnd::connectAll()
 
 void BackEnd::readButtons()
 {
+    QString tmp = QString(buttonsPort->readAll());
 
-    m_readButtons =  QString(buttonsPort->readAll());
+    if (tmp.isEmpty()) qDebug() << "buttons serial is empty";
+    qDebug() << "Buttons tmp: " << tmp.toInt();
+    m_readButtons =  tmp;
        if (!m_buttonsTimer.isActive())
            m_buttonsTimer.start(20);
 }
 
 void BackEnd::readSensors()
 {
+    QString tmp = QString(sensorsPort->readAll());
 
-    m_readSensors = QString(sensorsPort->readAll());
+    if (tmp.isEmpty()) qDebug() << "Sensors serial is empty";
+    qDebug() << "Sensors tmp: " << tmp;
+    m_readSensors = tmp;
        if (!m_sensorsTimer.isActive())
            m_sensorsTimer.start(20);
 }
 
 void BackEnd::readAffectiva()
 {
+    QString tmp = QString::fromStdString(s_recv(subscriber).data()) ;
+    if (tmp != "aff" && tmp != "") m_readAffectiva = tmp;
 
-    m_readAffectiva = QString::fromStdString(s_recv(subscriber).data()) ;
        if (!m_affectivaTimer.isActive())
            m_affectivaTimer.start(20);
 }
 
-
-
-void BackEnd::handleButtonsTimeout(){
-
-    if(!m_readButtons.isEmpty())
-    {
-        qDebug()<< "Buttons Val: " << m_readButtons;
-    }
-    else {
-       // qDebug() << "Haven't received data from Arduino Buttons module";
-      //  qDebug() << QString::fromStdString(s_recv (subscriber));
-
-    }
-}
-
-void BackEnd::handleSensorsTimeout(){
-
-    if(!m_readSensors.isEmpty())
-    {
-        qDebug()<< "Sensors Val: " << m_readSensors;
-    }
-    else {
-       // qDebug() << "Haven't received data from Arduino Sensors module";
-    }
-}
-
-void BackEnd::handleAffectivaTimeout(){
-
-    if(!m_readAffectiva.isEmpty())
-    {
-        qDebug()<< "Affectiva: " << QString(m_readAffectiva);
-    }
-    else {
-       // qDebug() << "Haven't received data from Arduino Sensors module";
-    }
-}
 
 
 void BackEnd::handleError(QSerialPort::SerialPortError serialPortError)
@@ -361,7 +354,9 @@ void BackEnd::handleWriting() {
 
     QTextStream measurementStream( &measurement );
 
-    measurementStream << m_readAffectiva << m_readSensors << ";" << m_readButtons << currentPicture() << ";" << time.elapsed() << endl;
+
+
+    measurementStream << m_readAffectiva << ";" << m_readSensors << ";" << m_readButtons << ";" << currentPicture() << ";" << time.elapsed() << endl;
 
 
 }
@@ -383,6 +378,8 @@ QList<int> BackEnd::getShuffledIndexes(){
 }
 
 QList<int> BackEnd::shuffleIndexes(){
+
+    QList<int> indexes;
     indexes.append(getShuffledIndexes());
     qDebug() << "indexes: " << indexes;
     return indexes;
