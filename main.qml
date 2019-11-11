@@ -16,10 +16,16 @@ ApplicationWindow {
     minimumWidth: 1100
     title: qsTr("EmoSense QML Edition")
     property int i: 0
+    property bool vid: false
     property var indexes
 
     Playlist {
         id: videoPlaylist
+        onCurrentIndexChanged: {
+            console.log("playlist changed:")
+                console.log(Qt.formatTime(new Date(), "hh:mm:ss"))
+
+        }
     }
 
     Loader {
@@ -367,7 +373,7 @@ Row{
                     backend.subjectSex = subjectSexCombo.currentText
 
 
-                    backend.connectAll()
+                   // backend.connectAll()
 
 
                     if (picturesFolderDialog.folder !== StandardPaths.PicturesLocation) {
@@ -381,8 +387,8 @@ Row{
                         backend.videosFolderPath = ""
 
                     if (backend.isPicturesSelected) {
-                        slideshow.visible = true
-                        slideshow.visibility = "FullScreen"
+                        slideshowWindow.visible = true
+                        slideshowWindow.visibility = "FullScreen"
                         slideshowTimer.running = true
 
                         backend.pictureCount = picturesModel.rowCount()
@@ -393,8 +399,8 @@ Row{
                     }
 
                     if (backend.isVideosSelected) {
-                        slideshow.visible = true
-                        slideshow.visibility = "FullScreen"
+                        videoPlayerWindow.visible = true
+                        videoPlayerWindow.visibility = "FullScreen"
                         for (var i = 0; i < videosModel.rowCount(); i++) {
                             console.log(videosModel.get(i, "fileURL"))
                             videoPlaylist.addItem(videosModel.get(i, "fileURL"))
@@ -409,8 +415,17 @@ Row{
     }
 
     Window {
-        id: slideshow
+        id: slideshowWindow
         color: "black"
+
+        Keys.onEscapePressed: {
+            picturesChooserRectangle.color = "lightblue"
+            picturesChooserMouseArea.enabled = true
+            videosChooserRectangle.color = "lightgreen"
+            videosChooserMouseArea.enabled = true
+            slideshowTimer.stop()
+            slideshowWindow.close()
+        }
 
         FolderListModel {
             id: picturesModel
@@ -447,16 +462,39 @@ Row{
             }
         }
 
+
+        Window{
+            id: videoPlayerWindow
+
         Video {
             id: videoPlayer
             width: 1920
             height: 1080
             playlist: videoPlaylist
 
+            //onPositionChanged: {
+
+
+               // console.log(videoPlayer.state)
+                //if(videoPlayer.state == MediaPlayer.EndOfMedia) {
+//
+  //                  console.log("End of media")
+    //            }
+
+              //  if (videoPlayer.position == videoPlayer.duration) {
+                    //videoPlayer.pause()
+                   // samWindow.visible = true
+                   // samWindow.visibility = "FullScreen"
+
+              //  }
+
+
+
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
                     videoPlayer.playlist.next()
+
                     }
             }
 
@@ -467,8 +505,8 @@ Row{
                 videosChooserRectangle.color = "lightgreen"
                 videosChooserMouseArea.enabled = true
                 videoPlayer.stop()
-                slideshowTimer.stop()
-                slideshow.close()
+
+                videoPlayerWindow.close()
             }
             Keys.onSpacePressed: videoPlayer.playbackState
                                  == MediaPlayer.PlayingState ? videoPlayer.pause(
@@ -477,6 +515,18 @@ Row{
             Keys.onRightPressed: videoPlayer.seek(videoPlayer.position + 5000)
         }
 
+        }
+    }
+
+    Window {
+    id: samWindow
+    visible: false
+    Image {
+    id: samImage
+    source: "assets/SAM.jpg"
+
+    }
 
     }
 }
+
