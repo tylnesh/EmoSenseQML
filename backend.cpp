@@ -164,6 +164,12 @@ QString BackEnd::currentPicture()
     return m_currentPicture;
 }
 
+QString BackEnd::currentVideo()
+{
+
+    return m_currentVideo;
+}
+
 void BackEnd::setVideosFolderPath(const QString &videosFolderPath)
 {
     if (videosFolderPath == m_videosFolderPath)
@@ -183,6 +189,18 @@ void BackEnd::setCurrentPicture(const QString &currentPicture)
     qDebug() << "Current Picture: " << m_currentPicture;
     emit currentPictureChanged();
 }
+
+
+void BackEnd::setCurrentVideo(const QString &currentVideo)
+{
+    if (currentVideo == m_currentVideo)
+        return;
+
+    m_currentVideo = currentVideo;
+    qDebug() << "Current Videos: " << m_currentVideo;
+    emit currentVideoChanged();
+}
+
 
 
 
@@ -298,7 +316,8 @@ void BackEnd::connectAll()
         measurement.open(QIODevice::ReadWrite);
         QTextStream measurementHeader( &measurement );
         measurementHeader << "id;age;sex;"<< endl;
-        measurementHeader << "joy;fear;disgust;sadness;anger;surprise;contempt;valence;engagement;affectivaAgeGroup;affectivaGender;GSR;HR;Temperature;Button Valence;Psychologist Valence;Filename;Timestamp;TimeReacted" << endl;
+        measurementHeader << subjectId() <<";"<< subjectAge() <<";"<< subjectSex() << endl;
+        measurementHeader << "joy;fear;disgust;sadness;anger;surprise;contempt;valence;engagement;affectivaAgeGroup;affectivaGender;GSR;HR;Temperature;SAM - Valence; SAM - Arousal; Psychologist Valence; Filename;Timestamp;TimeReacted" << endl;
 }
 
     connect(&m_fileWriterTimer, &QTimer::timeout, this, &BackEnd::handleWriting);
@@ -356,10 +375,8 @@ void BackEnd::handleWriting() {
 
     QTextStream measurementStream( &measurement );
 
-
-
-    measurementStream << m_readAffectiva << ";" << m_readSensors << ";" << m_readButtons << ";" << currentPicture() << ";" << time.elapsed() << endl;
-
+   if (isPicturesSelected()) measurementStream << m_readAffectiva << ";" << m_readSensors << ";" << m_readButtons << ";" << currentPicture() << ";" << time.elapsed() << endl;
+   if (isVideosSelected()) measurementStream << m_readAffectiva << ";" << m_readSensors << ";" << currentVideo() << ";" << time.elapsed() << endl;
 
 }
 
@@ -388,4 +405,35 @@ QList<int> BackEnd::shuffleIndexes(){
     indexes.append(getShuffledIndexes());
     qDebug() << "indexes: " << indexes;
     return indexes;
+}
+
+
+int BackEnd::samValence()
+{
+    return m_samValence;
+}
+
+void BackEnd::setSamValence(const int &samValence)
+{
+    if (samValence == m_samValence)
+        return;
+
+    m_samValence = samValence;
+    qDebug() << "SAM VALENCE: " << m_samValence;
+    emit samValenceChanged();
+}
+
+int BackEnd::samArousal()
+{
+    return m_samArousal;
+}
+
+void BackEnd::setSamArousal(const int &samArousal)
+{
+    if (samArousal == m_samArousal)
+        return;
+
+    m_samArousal = samArousal;
+    qDebug() << "SAM AROUSAL: " << m_samArousal;
+    emit samArousalChanged();
 }

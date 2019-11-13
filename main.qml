@@ -23,7 +23,12 @@ ApplicationWindow {
         id: videoPlaylist
         onCurrentIndexChanged: {
             console.log("playlist changed:")
-                console.log(Qt.formatTime(new Date(), "hh:mm:ss"))
+            console.log(Qt.formatTime(new Date(), "hh:mm:ss"))
+
+            samWindow.visible = true
+            samWindow.visibility = "FullScreen"
+            videoPlayer.pause()
+
 
         }
     }
@@ -443,6 +448,7 @@ Row{
             id: currentImage
             source: ""
             anchors.fill: parent
+            fillMode: Image.PreserveAspectFit
         }
 
         Timer {
@@ -521,11 +527,68 @@ Row{
     Window {
     id: samWindow
     visible: false
+    width: 1920
+    height: 1080
+    minimumWidth: 1100
+
     Image {
     id: samImage
     source: "assets/SAM.jpg"
+    anchors.centerIn: parent
+    //TODO: Map buttons to image
+    }
+
+    Rectangle {
+        id: submitButton
+        width: 300
+        height: 200
+        color: "green"
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                backend.samArousal = samArousalSlider.value
+                backend.samValence = samValenceSlider.value
+                samArousalSlider.value = samValenceSlider.value = 5
+                samWindow.visible = false
+                backend.currentVideo = videoPlaylist.itemSource(currentIndex)
+                videoPlayer.play()
+            }
+            }
+    }
+
+    Slider {
+        anchors.left: samImage.left
+        anchors.top: samImage.top
+        width: samImage.width - 100
+        anchors.leftMargin: 50
+        anchors.topMargin: 150
+        id: samValenceSlider
+        from: 1
+        value: 5
+        stepSize: 1
+        snapMode: Slider.SnapAlways
+        to: 9
 
     }
+
+    Slider {
+        anchors.left: samImage.left
+        anchors.bottom: samImage.bottom
+        width: samImage.width - 100
+        anchors.leftMargin: 50
+        anchors.bottomMargin: 10
+        id: samArousalSlider
+        from: 1
+        value: 5
+        stepSize: 1
+        snapMode: Slider.SnapAlways
+        to: 9
+
+    }
+
 
     }
 }

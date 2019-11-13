@@ -23,11 +23,14 @@ class BackEnd : public QObject
 
     Q_PROPERTY(bool isPicturesSelected READ isPicturesSelected WRITE setIsPicturesSelected NOTIFY isPicturesSelectedChanged)
     Q_PROPERTY(bool isVideosSelected READ isVideosSelected WRITE setIsVideosSelected NOTIFY isVideosSelectedChanged)
+
     Q_PROPERTY(QString currentPicture READ currentPicture WRITE setCurrentPicture NOTIFY currentPictureChanged)
+    Q_PROPERTY(QString currentVideo READ currentVideo WRITE setCurrentVideo NOTIFY currentVideoChanged)
 
     Q_PROPERTY(int pictureCount READ pictureCount WRITE setPictureCount NOTIFY pictureCountChanged)
 
-    //Q_PROPERTY(QList<int> indexes READ indexes)
+    Q_PROPERTY(int samArousal READ samArousal WRITE setSamArousal NOTIFY samArousalChanged)
+    Q_PROPERTY(int samValence READ samValence WRITE setSamValence NOTIFY samValenceChanged)
 
 
 
@@ -41,6 +44,8 @@ public:
     QString subjectId();
     int subjectAge();
     QString subjectSex();
+    int samValence();
+    int samArousal();
 
     QString arduinoButtonsPath();
     QString arduinoSensorsPath();
@@ -50,6 +55,7 @@ public:
     QString videosFolderPath();
 
     QString currentPicture();
+    QString currentVideo();
 
     bool isPicturesSelected();
     bool isVideosSelected();
@@ -59,6 +65,8 @@ public:
     void setSubjectId(const QString &subjectId);
     void setSubjectAge(const int &subjectAge);
     void setSubjectSex(const QString &subjectSex);
+    void setSamValence(const int &samValence);
+    void setSamArousal(const int &samArousal);
 
     void setArduinoButtonsPath(const QString &arduinoButtonsPath);
     void setArduinoSensorsPath(const QString &arduinoSensorsPath);
@@ -71,6 +79,7 @@ public:
     void setIsVideosSelected(const bool &isVideosSelected);
 
     void setCurrentPicture(const QString &currentPicture);
+    void setCurrentVideo(const QString &currentVideo);
 
     Q_INVOKABLE QStringList availablePorts();
     Q_INVOKABLE void connectAll();
@@ -97,6 +106,9 @@ signals:
     void subjectAgeChanged();
     void subjectSexChanged();
 
+    void samValenceChanged();
+    void samArousalChanged();
+
     void arduinoButtonsPathChanged();
     void arduinoSensorsPathChanged();
     void affectivaIPChanged();
@@ -108,6 +120,8 @@ signals:
     void isVideosSelectedChanged();
 
     void currentPictureChanged();
+    void currentVideoChanged();
+
 
 private:
 
@@ -115,6 +129,9 @@ private:
     QString m_subjectId;
     int m_subjectAge = 0;
     QString m_subjectSex;
+
+    int m_samValence = 0;
+    int m_samArousal = 0;
 
     QString m_arduinoButtonsPath;
     QString m_arduinoSensorsPath;
@@ -124,6 +141,7 @@ private:
     QString m_videosFolderPath;
 
     QString m_currentPicture;
+    QString m_currentVideo;
 
     bool m_isPicturesSelected = false;
     bool m_isVideosSelected = false;
@@ -146,10 +164,6 @@ private:
     QTimer m_fileWriterTimer;
 
     zmq::context_t *contextAffectiva;
-
-
- //   zmq::socket_t *subscriber;
-
     QString affectivaData;
 
 protected slots:
