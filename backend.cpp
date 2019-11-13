@@ -10,7 +10,6 @@
 
 zmq::context_t contextAffectiva(1);
 zmq::socket_t subscriber(contextAffectiva, ZMQ_SUB);
-QString filename="";
 QFile measurement;
 
 

@@ -459,7 +459,7 @@ Row{
 
 
                 currentImage.source = picturesModel.get(indexes[i], "fileURL")
-                backend.currentPicture = picturesModel.get(indexes[i], "fileURL")
+                backend.currentPicture = picturesModel.get(indexes[i], "fileName")
                 if (++i == picturesModel.count) {
                     i = 0
                     running = false
@@ -553,7 +553,9 @@ Row{
                 backend.samValence = samValenceSlider.value
                 samArousalSlider.value = samValenceSlider.value = 5
                 samWindow.visible = false
-                backend.currentVideo = videoPlaylist.itemSource(currentIndex)
+                var splitStr = videoPlaylist.currentItemSource.toString().split("/")
+                backend.currentVideo = splitStr[splitStr.length - 1]
+
                 videoPlayer.play()
             }
             }
