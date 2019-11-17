@@ -28,8 +28,6 @@ ApplicationWindow {
             samWindow.visible = true
             samWindow.visibility = "FullScreen"
             videoPlayer.pause()
-
-
         }
     }
 
@@ -44,7 +42,6 @@ ApplicationWindow {
     Component.onCompleted: {
 
         console.log(backend.availablePorts())
-
     }
 
     Rectangle {
@@ -75,87 +72,83 @@ ApplicationWindow {
         height: parent.height - titleRectangle.height - bottomRectangle.height
         color: "#fefefe"
 
-        ColumnLayout{
+        ColumnLayout {
 
             spacing: 50
 
-
-
             Text {
-            id: inputHeader
-            text: "Select inputs:"
-            //anchors.horizontalCenter: parent.horizontalCenter
-            font.family: "Helvetica"
-            font.pointSize: 32
-            color: "black"
-        }
-
-
-             Row {
-        Text {
-            id: arduinoButtonsLabel
-            text: "Buttons Path:"
-            //anchors.top: inputHeader.bottom
-            font.family: "Helvetica"
-            font.pointSize: 24
-            color: "black"
-        }
-
-
-        ComboBox {
-            id: arduinoButtonsPath
-            //anchors.top: inputHeader.bottom
-            //anchors.left: arduinoButtonsLabel.right
-            //anchors.leftMargin: 20
-            model : backend.availablePorts()
-            onAccepted: {
-                 console.log(currentText)
+                id: inputHeader
+                text: "Select inputs:"
+                //anchors.horizontalCenter: parent.horizontalCenter
+                font.family: "Helvetica"
+                font.pointSize: 32
+                color: "black"
             }
-        }
-}
 
-Row{
-        Text {
-            id: arduinoSensorsLabel
-            text: "Sensors Path:"
-            //anchors.top: arduinoButtonsLabel.bottom
-            font.family: "Helvetica"
-            font.pointSize: 24
-            color: "black"
-        }
+            Row {
+                Text {
+                    id: arduinoButtonsLabel
+                    text: "Buttons Path:"
+                    //anchors.top: inputHeader.bottom
+                    font.family: "Helvetica"
+                    font.pointSize: 24
+                    color: "black"
+                }
 
-        ComboBox {
-            id: arduinoSensorsPath
-            //anchors.top: arduinoButtonsLabel.bottom
-            //anchors.left: arduinoSensorsLabel.right
-            //anchors.leftMargin: 20
-            model : backend.availablePorts()
-            onAccepted: {
-                console.log(currentText)
+                ComboBox {
+                    id: arduinoButtonsPath
+                    //anchors.top: inputHeader.bottom
+                    //anchors.left: arduinoButtonsLabel.right
+                    //anchors.leftMargin: 20
+                    model: backend.availablePorts()
+                    onAccepted: {
+                        console.log(currentText)
+                    }
+                }
             }
-        }
-}
 
-Row{
+            Row {
+                Text {
+                    id: arduinoSensorsLabel
+                    text: "Sensors Path:"
+                    //anchors.top: arduinoButtonsLabel.bottom
+                    font.family: "Helvetica"
+                    font.pointSize: 24
+                    color: "black"
+                }
 
-        Text {
-            id: affectivaLabel
-            text: "Affectiva IP:"
-            //anchors.top: arduinoSensorsLabel.bottom
-            font.family: "Helvetica"
-            font.pointSize: 24
-            color: "black"
-        }
+                ComboBox {
+                    id: arduinoSensorsPath
+                    //anchors.top: arduinoButtonsLabel.bottom
+                    //anchors.left: arduinoSensorsLabel.right
+                    //anchors.leftMargin: 20
+                    model: backend.availablePorts()
+                    onAccepted: {
+                        console.log(currentText)
+                    }
+                }
+            }
 
-        TextField {
-            id: affectivaIP
-            //anchors.top: arduinoSensorsLabel.bottom
-            ///anchors.left: affectivaLabel.right
-            //anchors.leftMargin: 20
-            text: "127.0.0.1:5555";
-            placeholderText: qsTr("Affectiva IP")
-        }
-    }
+            Row {
+
+                Text {
+                    id: affectivaLabel
+                    text: "Affectiva IP:"
+                    //anchors.top: arduinoSensorsLabel.bottom
+                    font.family: "Helvetica"
+                    font.pointSize: 24
+                    color: "black"
+                }
+
+                TextField {
+                    id: affectivaIP
+                    //anchors.top: arduinoSensorsLabel.bottom
+                    ///anchors.left: affectivaLabel.right
+                    //anchors.leftMargin: 20
+                    text: "127.0.0.1:5555"
+                    placeholderText: qsTr("Affectiva IP")
+                }
+            }
         }
     }
 
@@ -168,52 +161,41 @@ Row{
         Layout.minimumWidth: infoHeader.width
         color: "#fefefe"
 
-
         ColumnLayout {
             id: infoRowLayout
             anchors.fill: infoRectangle
             spacing: 1
+
             //anchors.top: infoHeader.bottom
+            Text {
+                id: infoHeader
+                text: "Enter information about subject:"
+                wrapMode: Text.WrapAnywhere
+                //anchors.horizontalCenter: parent.horizontalCenter
+                Layout.alignment: Qt.AlignCenter
 
-        Text {
-            id: infoHeader
-            text: "Enter information about subject:"
-            wrapMode: Text.WrapAnywhere
-            //anchors.horizontalCenter: parent.horizontalCenter
-            Layout.alignment: Qt.AlignCenter
+                font.family: "Helvetica"
+                font.pointSize: 32
+                color: "black"
+            }
 
+            Text {
+                id: subjectIDLabel
+                Layout.alignment: Qt.AlignCenter
 
+                text: "Id:"
+                font.family: "Helvetica"
+                font.pointSize: 24
+                color: "black"
+            }
 
-            font.family: "Helvetica"
-            font.pointSize: 32
-            color: "black"
-        }
+            TextField {
+                id: subjectID
+                Layout.alignment: Qt.AlignCenter
+                text: backend.subjectId
 
-
-
-
-
-                Text {
-                    id: subjectIDLabel
-                    Layout.alignment: Qt.AlignCenter
-
-                    text: "Id:"
-                    font.family: "Helvetica"
-                    font.pointSize: 24
-                    color: "black"
-                }
-
-                TextField {
-                    id: subjectID
-                    Layout.alignment: Qt.AlignCenter
-                    text: backend.subjectId
-
-
-                    placeholderText: qsTr("Subject id")
-                }
-
-
-
+                placeholderText: qsTr("Subject id")
+            }
 
             Text {
                 id: ageLabel
@@ -235,24 +217,23 @@ Row{
                 //onTextChanged: backend.subjectAge = parseInt(subjectAge.text)
             }
 
-Row{
-    Layout.alignment: Qt.AlignCenter
+            Row {
+                Layout.alignment: Qt.AlignCenter
 
-            Text {
-                id: sexLabel
-                text: "Sex:"
-                //anchors.top: subjectNameLabel.bottom
-                font.family: "Helvetica"
-                font.pointSize: 24
-                color: "black"
+                Text {
+                    id: sexLabel
+                    text: "Sex:"
+                    //anchors.top: subjectNameLabel.bottom
+                    font.family: "Helvetica"
+                    font.pointSize: 24
+                    color: "black"
+                }
+
+                ComboBox {
+                    id: subjectSexCombo
+                    model: ["Male", "Female", "Other"]
+                }
             }
-
-            ComboBox {
-                id: subjectSexCombo
-                model: [ "Male", "Female", "Other" ]
-
-        }
-}
         }
     }
 
@@ -378,9 +359,7 @@ Row{
                     backend.subjectSex = subjectSexCombo.currentText
 
 
-                   // backend.connectAll()
-
-
+                    // backend.connectAll()
                     if (picturesFolderDialog.folder !== StandardPaths.PicturesLocation) {
                         backend.picturesFolderPath = picturesFolderDialog.folder
                     } else
@@ -411,8 +390,6 @@ Row{
                             videoPlaylist.addItem(videosModel.get(i, "fileURL"))
                         }
                         videoPlayer.play()
-
-
                     }
                 }
             }
@@ -457,9 +434,9 @@ Row{
             repeat: true
             onTriggered: {
 
-
                 currentImage.source = picturesModel.get(indexes[i], "fileURL")
-                backend.currentPicture = picturesModel.get(indexes[i], "fileName")
+                backend.currentPicture = picturesModel.get(indexes[i],
+                                                           "fileName")
                 if (++i == picturesModel.count) {
                     i = 0
                     running = false
@@ -467,10 +444,10 @@ Row{
                 }
             }
         }
+    }
 
-
-        Window{
-            id: videoPlayerWindow
+    Window {
+        id: videoPlayerWindow
 
         Video {
             id: videoPlayer
@@ -478,30 +455,11 @@ Row{
             height: 1080
             playlist: videoPlaylist
 
-            //onPositionChanged: {
-
-
-               // console.log(videoPlayer.state)
-                //if(videoPlayer.state == MediaPlayer.EndOfMedia) {
-//
-  //                  console.log("End of media")
-    //            }
-
-              //  if (videoPlayer.position == videoPlayer.duration) {
-                    //videoPlayer.pause()
-                   // samWindow.visible = true
-                   // samWindow.visibility = "FullScreen"
-
-              //  }
-
-
-
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
                     videoPlayer.playlist.next()
-
-                    }
+                }
             }
 
             focus: true
@@ -517,81 +475,76 @@ Row{
             Keys.onSpacePressed: videoPlayer.playbackState
                                  == MediaPlayer.PlayingState ? videoPlayer.pause(
                                                                    ) : videoPlayer.play()
-            Keys.onLeftPressed: videoPlayer.seek(videoPlayer.position - 3000)
-            Keys.onRightPressed: videoPlayer.seek(videoPlayer.position + 5000)
-        }
-
+            Keys.onLeftPressed: videoPlayer.seek(
+                                    videoPlayer.position - 3000)
+            Keys.onRightPressed: videoPlayer.seek(
+                                     videoPlayer.position + 5000)
         }
     }
 
     Window {
-    id: samWindow
-    visible: false
-    width: 1920
-    height: 1080
-    minimumWidth: 1100
+        id: samWindow
+        visible: false
+        width: 1920
+        height: 1080
+        minimumWidth: 1100
 
-    Image {
-    id: samImage
-    source: "assets/SAM.jpg"
-    anchors.centerIn: parent
-    //TODO: Map buttons to image
-    }
+        Image {
+            id: samImage
+            source: "assets/SAM.jpg"
+            anchors.centerIn: parent
+        }
 
-    Rectangle {
-        id: submitButton
-        width: 300
-        height: 200
-        color: "green"
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
+        Rectangle {
+            id: submitButton
+            width: 300
+            height: 200
+            color: "green"
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
 
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                backend.samArousal = samArousalSlider.value
-                backend.samValence = samValenceSlider.value
-                samArousalSlider.value = samValenceSlider.value = 5
-                samWindow.visible = false
-                var splitStr = videoPlaylist.currentItemSource.toString().split("/")
-                backend.currentVideo = splitStr[splitStr.length - 1]
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    backend.samArousal = samArousalSlider.value
+                    backend.samValence = samValenceSlider.value
+                    samArousalSlider.value = samValenceSlider.value = 5
+                    samWindow.visible = false
+                    var splitStr = videoPlaylist.currentItemSource.toString(
+                                ).split("/")
+                    backend.currentVideo = splitStr[splitStr.length - 1]
 
-                videoPlayer.play()
+                    videoPlayer.play()
+                }
             }
-            }
-    }
+        }
 
-    Slider {
-        anchors.left: samImage.left
-        anchors.top: samImage.top
-        width: samImage.width - 100
-        anchors.leftMargin: 50
-        anchors.topMargin: 150
-        id: samValenceSlider
-        from: 1
-        value: 5
-        stepSize: 1
-        snapMode: Slider.SnapAlways
-        to: 9
+        Slider {
+            anchors.left: samImage.left
+            anchors.top: samImage.top
+            width: samImage.width - 100
+            anchors.leftMargin: 50
+            anchors.topMargin: 150
+            id: samValenceSlider
+            from: 1
+            value: 5
+            stepSize: 1
+            snapMode: Slider.SnapAlways
+            to: 9
+        }
 
-    }
-
-    Slider {
-        anchors.left: samImage.left
-        anchors.bottom: samImage.bottom
-        width: samImage.width - 100
-        anchors.leftMargin: 50
-        anchors.bottomMargin: 10
-        id: samArousalSlider
-        from: 1
-        value: 5
-        stepSize: 1
-        snapMode: Slider.SnapAlways
-        to: 9
-
-    }
-
-
+        Slider {
+            anchors.left: samImage.left
+            anchors.bottom: samImage.bottom
+            width: samImage.width - 100
+            anchors.leftMargin: 50
+            anchors.bottomMargin: 10
+            id: samArousalSlider
+            from: 1
+            value: 5
+            stepSize: 1
+            snapMode: Slider.SnapAlways
+            to: 9
+        }
     }
 }
-
