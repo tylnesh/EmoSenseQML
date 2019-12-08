@@ -47,7 +47,7 @@ void BackEnd::setSubjectId(const QString &subjectId)
         return;
 
     m_subjectId = subjectId;
-    qDebug() << "Subject Name: " << m_subjectId;
+    qDebug() << "Subject Id: " << m_subjectId;
     emit subjectIdChanged();
 }
 
