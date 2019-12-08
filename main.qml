@@ -54,7 +54,7 @@ ApplicationWindow {
         Text {
             x: 450
             y: 24
-            text: "EmoSense QML Edition"
+            text: "EmoSense QML Edition - FakeNews"
             anchors.verticalCenterOffset: 1
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
@@ -78,63 +78,18 @@ ApplicationWindow {
 
             Text {
                 id: inputHeader
-                text: "Select inputs:"
-                //anchors.horizontalCenter: parent.horizontalCenter
+                text: "Zadajte zdroje dát:"
                 font.family: "Helvetica"
                 font.pointSize: 32
                 color: "black"
             }
 
-            Row {
-                Text {
-                    id: arduinoButtonsLabel
-                    text: "Buttons Path:"
-                    //anchors.top: inputHeader.bottom
-                    font.family: "Helvetica"
-                    font.pointSize: 24
-                    color: "black"
-                }
 
-                ComboBox {
-                    id: arduinoButtonsPath
-                    //anchors.top: inputHeader.bottom
-                    //anchors.left: arduinoButtonsLabel.right
-                    //anchors.leftMargin: 20
-                    model: backend.availablePorts()
-                    onAccepted: {
-                        console.log(currentText)
-                    }
-                }
-            }
-
-            Row {
-                Text {
-                    id: arduinoSensorsLabel
-                    text: "Sensors Path:"
-                    //anchors.top: arduinoButtonsLabel.bottom
-                    font.family: "Helvetica"
-                    font.pointSize: 24
-                    color: "black"
-                }
-
-                ComboBox {
-                    id: arduinoSensorsPath
-                    //anchors.top: arduinoButtonsLabel.bottom
-                    //anchors.left: arduinoSensorsLabel.right
-                    //anchors.leftMargin: 20
-                    model: backend.availablePorts()
-                    onAccepted: {
-                        console.log(currentText)
-                    }
-                }
-            }
-
-            Row {
+            Row { spacing:10
 
                 Text {
                     id: affectivaLabel
                     text: "Affectiva IP:"
-                    //anchors.top: arduinoSensorsLabel.bottom
                     font.family: "Helvetica"
                     font.pointSize: 24
                     color: "black"
@@ -142,9 +97,6 @@ ApplicationWindow {
 
                 TextField {
                     id: affectivaIP
-                    //anchors.top: arduinoSensorsLabel.bottom
-                    ///anchors.left: affectivaLabel.right
-                    //anchors.leftMargin: 20
                     text: "127.0.0.1:5555"
                     placeholderText: qsTr("Affectiva IP")
                 }
@@ -162,27 +114,18 @@ ApplicationWindow {
         color: "#fefefe"
 
         ColumnLayout {
-            id: infoRowLayout
-            anchors.fill: infoRectangle
-            spacing: 1
-
-            //anchors.top: infoHeader.bottom
+            spacing: 10
             Text {
                 id: infoHeader
-                text: "Enter information about subject:"
+                text: "Zadajte informacie o subjekte"
                 wrapMode: Text.WrapAnywhere
-                //anchors.horizontalCenter: parent.horizontalCenter
-                Layout.alignment: Qt.AlignCenter
-
                 font.family: "Helvetica"
                 font.pointSize: 32
                 color: "black"
             }
-
+Row{ spacing: 10
             Text {
                 id: subjectIDLabel
-                Layout.alignment: Qt.AlignCenter
-
                 text: "Id:"
                 font.family: "Helvetica"
                 font.pointSize: 24
@@ -191,18 +134,14 @@ ApplicationWindow {
 
             TextField {
                 id: subjectID
-                Layout.alignment: Qt.AlignCenter
                 text: backend.subjectId
 
-                placeholderText: qsTr("Subject id")
-            }
-
+                placeholderText: qsTr("Id subjektu")
+            }}
+Row{ spacing: 10
             Text {
                 id: ageLabel
-                text: "Age:"
-                Layout.alignment: Qt.AlignCenter
-
-                //anchors.top: subjectNameLabel.bottom
+                text: "Vek:"
                 font.family: "Helvetica"
                 font.pointSize: 24
                 color: "black"
@@ -210,115 +149,52 @@ ApplicationWindow {
 
             TextField {
                 id: subjectAge
-                Layout.alignment: Qt.AlignCenter
-
                 text: backend.subjectAge
-                placeholderText: qsTr("Age")
-                //onTextChanged: backend.subjectAge = parseInt(subjectAge.text)
-            }
+                placeholderText: qsTr("Vek")
+            }}
 
-            Row {
-                Layout.alignment: Qt.AlignCenter
-
+            Row {spacing: 10
                 Text {
                     id: sexLabel
-                    text: "Sex:"
-                    //anchors.top: subjectNameLabel.bottom
+                    text: "Pohlavie:"
                     font.family: "Helvetica"
                     font.pointSize: 24
                     color: "black"
                 }
-
                 ComboBox {
                     id: subjectSexCombo
-                    model: ["Male", "Female", "Other"]
+                    model: ["Muž", "Žena", "Iné"]
                 }
             }
+
+
+            Row{
+                Column{ spacing:5
+                Text {
+                    id: educationLabel
+                    text: "Najvyššie dosiahnuté vzdelanie:"
+                    font.family: "Helvetica"
+                    font.pointSize: 24
+                    color: "black"
+                }
+                ComboBox {
+                    width: infoRectangle.width
+                    id: subjectEducationCombo
+
+                    model: ["Stredná škola - výučný list",
+                        "Stredná škola - maturita",
+                        "1. stupeň vysokoškolského vzdelania",
+                        "2. stupeň vysokoškolského vzdelania" ,
+                        "3. stupeň vysokoškolského vzdelania"]
+                }
+                }
+}
+
+
         }
     }
 
-    Rectangle {
-        id: displayRectangle
-        anchors.left: infoRectangle.right
-        anchors.top: titleRectangle.bottom
-        width: parent.width / 3
-        height: parent.height - titleRectangle.height - bottomRectangle.height
-        color: "#eeeeee"
 
-        Rectangle {
-            id: picturesChooserRectangle
-            anchors.top: displayRectangle.top
-            width: parent.width
-            height: parent.height / 2
-            color: "lightblue"
-            Text {
-                id: picturesChooserLabel
-                text: "Select Pictures Folder"
-                anchors.centerIn: parent
-                font.family: "Helvetica"
-                font.pointSize: 24
-                color: "black"
-            }
-
-            MouseArea {
-                id: picturesChooserMouseArea
-                anchors.fill: parent
-                onClicked: picturesFolderDialog.open()
-            }
-
-            FolderDialog {
-                id: picturesFolderDialog
-                title: "Select Pictures Folder"
-                folder: StandardPaths.standardLocations(
-                            StandardPaths.PicturesLocation)[0]
-                onAccepted: {
-                    console.log("You chose: " + picturesFolderDialog.folder)
-                    backend.isPicturesSelected = true
-                    videosChooserRectangle.color = "black"
-                    videosChooserMouseArea.enabled = false
-                }
-                onRejected: {
-                    console.log("Canceled")
-                }
-            }
-        }
-
-        Rectangle {
-            id: videosChooserRectangle
-            anchors.top: picturesChooserRectangle.bottom
-            width: parent.width
-            height: parent.height / 2
-            color: "lightgreen"
-            Text {
-                id: videosChooserLabel
-                text: "Select Videos Folder"
-                anchors.centerIn: parent
-                font.family: "Helvetica"
-                font.pointSize: 24
-                color: "black"
-            }
-
-            MouseArea {
-                id: videosChooserMouseArea
-                anchors.fill: parent
-                onClicked: videosFolderDialog.open()
-            }
-
-            FolderDialog {
-                id: videosFolderDialog
-                folder: StandardPaths.standardLocations(
-                            StandardPaths.MoviesLocation)[0]
-                title: "Select Videos Folder"
-                onAccepted: {
-                    console.log("You chose: " + videosFolderDialog.folder)
-                    backend.isVideosSelected = true
-                }
-                onRejected: {
-                    console.log("Canceled")
-                }
-            }
-        }
-    }
 
     Rectangle {
         id: bottomRectangle
