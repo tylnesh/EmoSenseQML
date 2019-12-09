@@ -81,6 +81,20 @@ void BackEnd::setSubjectSex(const QString &subjectSex){
     emit subjectSexChanged();
 }
 
+
+QString BackEnd::subjectEducation()
+{
+    return m_subjectEducation;
+}
+
+void BackEnd::setSubjectEducation(const QString &subjectEducation)
+{
+    if (subjectEducation == m_subjectEducation)
+        return;
+    m_subjectEducation = subjectEducation;
+    emit subjectEducationChanged();
+}
+
 //Getters/Setters for Arduino Buttons Path
 
 QString BackEnd::arduinoButtonsPath()
@@ -250,83 +264,30 @@ QStringList BackEnd::availablePorts()
 void BackEnd::connectAll()
 {
 
+        QString address = "tcp://" + affectivaIP();
+        subscriber.connect(address.toUtf8().constData());
+        subscriber.setsockopt( ZMQ_SUBSCRIBE, "aff", 3);
 
-
-    buttonsPort = new QSerialPort();
-    sensorsPort = new QSerialPort();    
-
-    buttonsPort->setPortName(arduinoButtonsPath());
-    sensorsPort->setPortName(arduinoSensorsPath());
-
-    QString address = "tcp://" + affectivaIP();
-    subscriber.connect(address.toUtf8().constData());
-    subscriber.setsockopt( ZMQ_SUBSCRIBE, "aff", 3);
-
-
-    qDebug() << "Subscriber connected? " << subscriber.connected();
-    connect(&m_affectivaTimer, &QTimer::timeout, this, &BackEnd::readAffectiva);
-    m_affectivaTimer.start(20);     
-
-    if (buttonsPort->open(QIODevice::ReadWrite))
-      {
-       buttonsPort->setBaudRate(QSerialPort::Baud9600);
-       buttonsPort->setDataBits(QSerialPort::Data8);
-       buttonsPort->setParity(QSerialPort::NoParity);
-       buttonsPort->setStopBits(QSerialPort::OneStop);
-       buttonsPort->setFlowControl(QSerialPort::NoFlowControl);
-       qDebug("Button Port: Connection established");
-
-       connect(buttonsPort, &QSerialPort::readyRead, this, &BackEnd::readButtons);
-       connect(buttonsPort, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
-                       this, &BackEnd::handleError);
-       } else qDebug("Button Port: Connection Error");
-
-
-    if (sensorsPort->open(QIODevice::ReadWrite))
-      {
-       sensorsPort->setBaudRate(QSerialPort::Baud9600);
-       sensorsPort->setDataBits(QSerialPort::Data8);
-       sensorsPort->setParity(QSerialPort::NoParity);
-       sensorsPort->setStopBits(QSerialPort::OneStop);
-       sensorsPort->setFlowControl(QSerialPort::NoFlowControl);
-       qDebug("Sensors Port: Connection established");
-       connect(sensorsPort, &QSerialPort::readyRead, this, &BackEnd::readSensors);
-       connect(sensorsPort, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
-                       this, &BackEnd::handleError);
-       } else qDebug("Sensors Port: Connection Error");
-
-
+        connect(&m_affectivaTimer, &QTimer::timeout, this, &BackEnd::readAffectiva);
+        m_affectivaTimer.start(20);
 
         QDateTime UTC(QDateTime::currentDateTimeUtc());
         QDateTime local(UTC);
 
-
-    if(isPicturesSelected()){
-        measurement.setFileName("./emotion_pictures_" + local.toString() +".csv");
+        measurement.setFileName("./" + subjectId() + "_emotion_pictures_" + local.toString() +".csv");
         measurement.open(QIODevice::ReadWrite);
         QTextStream measurementHeader( &measurement );
-        measurementHeader << "id;age;sex;"<< endl;
-        measurementHeader << subjectId() <<";"<< subjectAge() <<";"<< subjectSex() << endl;
-        measurementHeader << "joy;fear;disgust;sadness;anger;surprise;contempt;valence;engagement;affectivaAgeGroup;affectivaGender;GSR;HR;Temperature;Button Valence;Psychologist Valence;Filename;Timestamp;TimeReacted" << endl;
+        measurementHeader << "id;age;sex;education"<< endl;
+        measurementHeader << subjectId() <<";"<< subjectAge() <<";"<< subjectSex() << ";" << subjectEducation() << endl;
+        measurementHeader << "joy;fear;disgust;sadness;anger;surprise;contempt;valence;engagement;affectivaAgeGroup;affectivaGender;Timestamp;TimeReacted" << endl;
+
+        connect(&m_fileWriterTimer, &QTimer::timeout, this, &BackEnd::handleWriting);
+        m_fileWriterTimer.start(20);
 }
 
-    if(isVideosSelected()){
-        measurement.setFileName("./emotion_videos_" + local.toString() +".csv");
-        measurement.open(QIODevice::ReadWrite);
-        QTextStream measurementHeader( &measurement );
-        measurementHeader << "id;age;sex;"<< endl;
-        measurementHeader << subjectId() <<";"<< subjectAge() <<";"<< subjectSex() << endl;
-        measurementHeader << "joy;fear;disgust;sadness;anger;surprise;contempt;valence;engagement;affectivaAgeGroup;affectivaGender;GSR;HR;Temperature;SAM - Valence; SAM - Arousal; Psychologist Valence; Filename;Timestamp;TimeReacted" << endl;
-}
-
-    connect(&m_fileWriterTimer, &QTimer::timeout, this, &BackEnd::handleWriting);
-    m_fileWriterTimer.start(20);
 
 
 
-
-
-}
 
 void BackEnd::readButtons()
 {

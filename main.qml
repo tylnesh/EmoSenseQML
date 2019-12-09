@@ -11,26 +11,11 @@ import com.tylnesh.backend 1.0
 ApplicationWindow {
     id: root
     visible: true
-    width: 1920
-    height: 1080
+    width: Screen.desktopAvailableWidth
+    height: Screen.desktopAvailableHeight
     minimumWidth: 1100
     title: qsTr("EmoSense QML Edition")
     property int i: 0
-    property bool vid: false
-    property var indexes
-
-    Playlist {
-        id: videoPlaylist
-        onCurrentIndexChanged: {
-            console.log("playlist changed:")
-            console.log(Qt.formatTime(new Date(), "hh:mm:ss"))
-
-            samWindow.visible = true
-            samWindow.visibility = "FullScreen"
-            videoPlayer.pause()
-        }
-    }
-
     Loader {
         id: pageLoader
     }
@@ -59,7 +44,7 @@ ApplicationWindow {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             font.family: "Helvetica"
-            font.pointSize: 72
+            font.pointSize: 56
             color: "black"
         }
     }
@@ -84,8 +69,8 @@ ApplicationWindow {
                 color: "black"
             }
 
-
-            Row { spacing:10
+            Row {
+                spacing: 10
 
                 Text {
                     id: affectivaLabel
@@ -123,37 +108,42 @@ ApplicationWindow {
                 font.pointSize: 32
                 color: "black"
             }
-Row{ spacing: 10
-            Text {
-                id: subjectIDLabel
-                text: "Id:"
-                font.family: "Helvetica"
-                font.pointSize: 24
-                color: "black"
+            Row {
+                spacing: 10
+                Text {
+                    id: subjectIDLabel
+                    text: "Id:"
+                    font.family: "Helvetica"
+                    font.pointSize: 24
+                    color: "black"
+                }
+
+                TextField {
+                    id: subjectID
+                    text: backend.subjectId
+
+                    placeholderText: qsTr("Id subjektu")
+                }
+            }
+            Row {
+                spacing: 10
+                Text {
+                    id: ageLabel
+                    text: "Vek:"
+                    font.family: "Helvetica"
+                    font.pointSize: 24
+                    color: "black"
+                }
+
+                TextField {
+                    id: subjectAge
+                    text: backend.subjectAge
+                    placeholderText: qsTr("Vek")
+                }
             }
 
-            TextField {
-                id: subjectID
-                text: backend.subjectId
-
-                placeholderText: qsTr("Id subjektu")
-            }}
-Row{ spacing: 10
-            Text {
-                id: ageLabel
-                text: "Vek:"
-                font.family: "Helvetica"
-                font.pointSize: 24
-                color: "black"
-            }
-
-            TextField {
-                id: subjectAge
-                text: backend.subjectAge
-                placeholderText: qsTr("Vek")
-            }}
-
-            Row {spacing: 10
+            Row {
+                spacing: 10
                 Text {
                     id: sexLabel
                     text: "Pohlavie:"
@@ -167,34 +157,26 @@ Row{ spacing: 10
                 }
             }
 
+            Row {
+                Column {
+                    spacing: 5
+                    Text {
+                        id: educationLabel
+                        text: "Najvyššie dosiahnuté vzdelanie:"
+                        font.family: "Helvetica"
+                        font.pointSize: 24
+                        color: "black"
+                    }
+                    ComboBox {
+                        width: infoRectangle.width
+                        id: subjectEducationCombo
 
-            Row{
-                Column{ spacing:5
-                Text {
-                    id: educationLabel
-                    text: "Najvyššie dosiahnuté vzdelanie:"
-                    font.family: "Helvetica"
-                    font.pointSize: 24
-                    color: "black"
+                        model: ["Stredná škola - výučný list", "Stredná škola - maturita", "1. stupeň vysokoškolského vzdelania", "2. stupeň vysokoškolského vzdelania", "3. stupeň vysokoškolského vzdelania"]
+                    }
                 }
-                ComboBox {
-                    width: infoRectangle.width
-                    id: subjectEducationCombo
-
-                    model: ["Stredná škola - výučný list",
-                        "Stredná škola - maturita",
-                        "1. stupeň vysokoškolského vzdelania",
-                        "2. stupeň vysokoškolského vzdelania" ,
-                        "3. stupeň vysokoškolského vzdelania"]
-                }
-                }
-}
-
-
+            }
         }
     }
-
-
 
     Rectangle {
         id: bottomRectangle
@@ -226,201 +208,66 @@ Row{ spacing: 10
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    backend.arduinoButtonsPath = arduinoButtonsPath.currentText
-                    backend.arduinoSensorsPath = arduinoSensorsPath.currentText
+                    //backend.arduinoButtonsPath = arduinoButtonsPath.currentText
+                    //backend.arduinoSensorsPath = arduinoSensorsPath.currentText
                     backend.affectivaIP = affectivaIP.text
 
                     backend.subjectId = subjectID.text
                     backend.subjectAge = subjectAge.text
                     backend.subjectSex = subjectSexCombo.currentText
-
-
-                    // backend.connectAll()
-                    if (picturesFolderDialog.folder !== StandardPaths.PicturesLocation) {
-                        backend.picturesFolderPath = picturesFolderDialog.folder
-                    } else
-                        backend.picturesFolderPath = ""
-
-                    if (videosFolderDialog.folder !== StandardPaths.MoviesLocation) {
-                        backend.videosFolderPath = videosFolderDialog.folder
-                    } else
-                        backend.videosFolderPath = ""
-
-                    if (backend.isPicturesSelected) {
-                        slideshowWindow.visible = true
-                        slideshowWindow.visibility = "FullScreen"
-                        slideshowTimer.running = true
-
-                        backend.pictureCount = picturesModel.rowCount()
-
-                        indexes = backend.shuffleIndexes()
-                        //console.log(indexes)
-                        console.log(backend.availablePorts())
-                    }
-
-                    if (backend.isVideosSelected) {
-                        videoPlayerWindow.visible = true
-                        videoPlayerWindow.visibility = "FullScreen"
-                        for (var i = 0; i < videosModel.rowCount(); i++) {
-                            console.log(videosModel.get(i, "fileURL"))
-                            videoPlaylist.addItem(videosModel.get(i, "fileURL"))
-                        }
-                        videoPlayer.play()
-                    }
+                    backend.subjectEducation = subjectEducationCombo.currentText
+                    questionnaire1.visible = true
+                    console.log(Screen.desktopAvailableWidth);
                 }
             }
         }
     }
 
     Window {
-        id: slideshowWindow
-        color: "black"
-
-        Keys.onEscapePressed: {
-            picturesChooserRectangle.color = "lightblue"
-            picturesChooserMouseArea.enabled = true
-            videosChooserRectangle.color = "lightgreen"
-            videosChooserMouseArea.enabled = true
-            slideshowTimer.stop()
-            slideshowWindow.close()
-        }
-
-        FolderListModel {
-            id: picturesModel
-            nameFilters: ["*.png", "*.jpg"]
-            folder: picturesFolderDialog.folder
-        }
-
-        FolderListModel {
-            id: videosModel
-            nameFilters: ["*.avi", "*.mp4", "*.mkv"]
-            folder: videosFolderDialog.folder
-        }
-
-        Image {
-            id: currentImage
-            source: ""
-            anchors.fill: parent
-            fillMode: Image.PreserveAspectFit
-        }
-
-        Timer {
-            id: slideshowTimer
-            interval: 5000
-            repeat: true
-            onTriggered: {
-
-                currentImage.source = picturesModel.get(indexes[i], "fileURL")
-                backend.currentPicture = picturesModel.get(indexes[i],
-                                                           "fileName")
-                if (++i == picturesModel.count) {
-                    i = 0
-                    running = false
-                    slideshow.close()
-                }
-            }
-        }
-    }
-
-    Window {
-        id: videoPlayerWindow
-
-        Video {
-            id: videoPlayer
-            width: 1920
-            height: 1080
-            playlist: videoPlaylist
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    videoPlayer.playlist.next()
-                }
-            }
-
-            focus: true
-            Keys.onEscapePressed: {
-                picturesChooserRectangle.color = "lightblue"
-                picturesChooserMouseArea.enabled = true
-                videosChooserRectangle.color = "lightgreen"
-                videosChooserMouseArea.enabled = true
-                videoPlayer.stop()
-
-                videoPlayerWindow.close()
-            }
-            Keys.onSpacePressed: videoPlayer.playbackState
-                                 == MediaPlayer.PlayingState ? videoPlayer.pause(
-                                                                   ) : videoPlayer.play()
-            Keys.onLeftPressed: videoPlayer.seek(
-                                    videoPlayer.position - 3000)
-            Keys.onRightPressed: videoPlayer.seek(
-                                     videoPlayer.position + 5000)
-        }
-    }
-
-    Window {
-        id: samWindow
+        id: questionnaire1
         visible: false
-        width: 1920
-        height: 1080
-        minimumWidth: 1100
+        width: Screen.desktopAvailableWidth
+        height: Screen.desktopAvailableHeight
+        ColumnLayout{
+        spacing: 10
 
-        Image {
-            id: samImage
-            source: "assets/SAM.jpg"
-            anchors.centerIn: parent
+        Rectangle{
+            width: questionnaire1.width
+            height: questionnaire1.height / 6
+            Text{
+anchors.fill:parent
+            padding: 20
+            horizontalAlignment: Text.AlignJustify
+            wrapMode: Text.WordWrap
+            text: qsTr("Na nasledujúcej strane sú uvedené tvrdenia, ktoré opisujú Vaše možné správanie. Použite prosím nižšie uvedenú škálu (1 – 5) k zhodnoteniu toho, do akej miery Vás jednotlivé tvrdenia vystihujú. Opisujte samých seba, aký ste v súčasnej dobe, nie takých, akými by ste chceli byť v budúcnosti. Opisujte samých seba tak, ako vnímate samých seba vo vzťahu k druhým ľuďom rovnakého pohlavia a približne rovnakého veku. Každé tvrdenie si starostlivo prečítajte a svoju odpoveď zaznamenajte do príslušnej kolónky.
+\n
+1 – Vôbec nevystihuje, 2 – Skôr nevystihuje, 3 – Ani vystihuje, ani nevystihuje, 4 – Skôr vystihuje, 5 – Úplne vystihuje")
+        }
+}
+
+
+        Row {
+        Text{
+            text: qsTr("1. Rada/Rád zabávam spoločnosť.")
+            }
+
+        ButtonGroup {
+            id: buttonGroup
         }
 
-        Rectangle {
-            id: submitButton
-            width: 300
-            height: 200
-            color: "green"
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    backend.samArousal = samArousalSlider.value
-                    backend.samValence = samValenceSlider.value
-                    samArousalSlider.value = samValenceSlider.value = 5
-                    samWindow.visible = false
-                    var splitStr = videoPlaylist.currentItemSource.toString(
-                                ).split("/")
-                    backend.currentVideo = splitStr[splitStr.length - 1]
-
-                    videoPlayer.play()
-                }
+        }
+        ListView {
+            model: ["1", "2", "3", "4", "5"]
+            orientation: Qt.Horizontal
+            delegate: RadioDelegate {
+                text: modelData
+                ButtonGroup.group: buttonGroup
             }
         }
 
-        Slider {
-            anchors.left: samImage.left
-            anchors.top: samImage.top
-            width: samImage.width - 100
-            anchors.leftMargin: 50
-            anchors.topMargin: 150
-            id: samValenceSlider
-            from: 1
-            value: 5
-            stepSize: 1
-            snapMode: Slider.SnapAlways
-            to: 9
-        }
 
-        Slider {
-            anchors.left: samImage.left
-            anchors.bottom: samImage.bottom
-            width: samImage.width - 100
-            anchors.leftMargin: 50
-            anchors.bottomMargin: 10
-            id: samArousalSlider
-            from: 1
-            value: 5
-            stepSize: 1
-            snapMode: Slider.SnapAlways
-            to: 9
+
         }
     }
 }
+

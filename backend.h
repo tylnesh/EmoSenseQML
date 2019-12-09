@@ -12,6 +12,7 @@ class BackEnd : public QObject
     Q_PROPERTY(QString subjectId READ subjectId WRITE setSubjectId NOTIFY subjectIdChanged)
     Q_PROPERTY(int subjectAge READ subjectAge WRITE setSubjectAge NOTIFY subjectAgeChanged)
     Q_PROPERTY(QString subjectSex READ subjectSex WRITE setSubjectSex NOTIFY subjectSexChanged)
+    Q_PROPERTY(QString subjectEducation READ subjectEducation WRITE setSubjectEducation NOTIFY subjectEducationChanged)
 
 
     Q_PROPERTY(QString arduinoButtonsPath READ arduinoButtonsPath WRITE setArduinoButtonsPath NOTIFY arduinoButtonsPathChanged)
@@ -44,6 +45,7 @@ public:
     QString subjectId();
     int subjectAge();
     QString subjectSex();
+    QString subjectEducation();
     int samValence();
     int samArousal();
 
@@ -65,6 +67,7 @@ public:
     void setSubjectId(const QString &subjectId);
     void setSubjectAge(const int &subjectAge);
     void setSubjectSex(const QString &subjectSex);
+    void setSubjectEducation(const QString &subjectEducation);
     void setSamValence(const int &samValence);
     void setSamArousal(const int &samArousal);
 
@@ -105,6 +108,7 @@ signals:
     void subjectIdChanged();
     void subjectAgeChanged();
     void subjectSexChanged();
+    void subjectEducationChanged();
 
     void samValenceChanged();
     void samArousalChanged();
@@ -129,6 +133,7 @@ private:
     QString m_subjectId;
     int m_subjectAge = 0;
     QString m_subjectSex;
+    QString m_subjectEducation;
 
     int m_samValence = 0;
     int m_samArousal = 0;
