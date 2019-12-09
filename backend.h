@@ -42,6 +42,10 @@ public:
     int pictureCount();
     //QList<int> indexes;
 
+    QList<QString> questionnaire1();
+    QList<QString> questionnaire2();
+
+
     QString subjectId();
     int subjectAge();
     QString subjectSex();
@@ -61,6 +65,9 @@ public:
 
     bool isPicturesSelected();
     bool isVideosSelected();
+
+    void setQuestionnaire1(const QList<QString> &questionnaire1);
+    void setQuestionnaire2(const QList<QString> &questionnaire2);
 
     void setPictureCount(const int &pictureCount);
 
@@ -104,6 +111,9 @@ public:
 
 signals:
 
+    void questionnaire1Changed();
+    void questionnaire2Changed();
+
     void pictureCountChanged();
     void subjectIdChanged();
     void subjectAgeChanged();
@@ -128,6 +138,9 @@ signals:
 
 
 private:
+
+    QList<QString> m_questionnaire1;
+    QList<QString> m_questionnaire1;
 
     int m_pictureCount = 0;
     QString m_subjectId;
