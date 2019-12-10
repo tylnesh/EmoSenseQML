@@ -19,6 +19,38 @@ BackEnd::BackEnd(QObject *parent) : QObject(parent)
 
 }
 
+
+
+
+QList<QString> BackEnd::questionnaire1() {
+    return m_questionnaire1;
+}
+
+void BackEnd::setQuestionnaire1(const QList<QString> &questionnaire1){
+    if (questionnaire1 == m_questionnaire1)
+        return;
+
+    m_questionnaire1 = questionnaire1;
+    qDebug() << m_questionnaire1;
+    emit questionnaire1Changed();
+
+}
+
+
+QList<QString> BackEnd::questionnaire2() {
+    return m_questionnaire1;
+}
+
+void BackEnd::setQuestionnaire2(const QList<QString> &questionnaire2){
+    if (questionnaire2 == m_questionnaire2)
+        return;
+
+    m_questionnaire2 = questionnaire2;
+    emit questionnaire2Changed();
+
+}
+
+
 int BackEnd::pictureCount()
 {
     return m_pictureCount;
@@ -335,8 +367,7 @@ void BackEnd::handleWriting() {
 
     QTextStream measurementStream( &measurement );
 
-   if (isPicturesSelected()) measurementStream << m_readAffectiva << ";" << m_readSensors << ";" << m_readButtons << ";" << currentPicture() << ";" << time.elapsed() << endl;
-   if (isVideosSelected()) measurementStream << m_readAffectiva << ";" << m_readSensors << ";" << currentVideo() << ";" << time.elapsed() << endl;
+   measurementStream << m_readAffectiva << ";" <<  ";" << time.elapsed() << endl;
 
 }
 

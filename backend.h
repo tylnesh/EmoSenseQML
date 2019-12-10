@@ -33,6 +33,10 @@ class BackEnd : public QObject
     Q_PROPERTY(int samArousal READ samArousal WRITE setSamArousal NOTIFY samArousalChanged)
     Q_PROPERTY(int samValence READ samValence WRITE setSamValence NOTIFY samValenceChanged)
 
+    Q_PROPERTY(QList<QString> questionnaire1 READ questionnaire1 WRITE setQuestionnaire1 NOTIFY questionnaire1Changed)
+    Q_PROPERTY(QList<QString> questionnaire2 READ questionnaire2 WRITE setQuestionnaire2 NOTIFY questionnaire2Changed)
+
+
 
 
 
@@ -140,7 +144,7 @@ signals:
 private:
 
     QList<QString> m_questionnaire1;
-    QList<QString> m_questionnaire1;
+    QList<QString> m_questionnaire2;
 
     int m_pictureCount = 0;
     QString m_subjectId;
