@@ -30,7 +30,7 @@ class BackEnd : public QObject
 
     Q_PROPERTY(int pictureCount READ pictureCount WRITE setPictureCount NOTIFY pictureCountChanged)
 
-    Q_PROPERTY(int samArousal READ samArousal WRITE setSamArousal NOTIFY samArousalChanged)
+    Q_PROPERTY(int samBelief READ samBelief WRITE setSamBelief NOTIFY samBeliefChanged)
     Q_PROPERTY(int samValence READ samValence WRITE setSamValence NOTIFY samValenceChanged)
 
     Q_PROPERTY(QList<QString> questionnaire1 READ questionnaire1 WRITE setQuestionnaire1 NOTIFY questionnaire1Changed)
@@ -55,7 +55,7 @@ public:
     QString subjectSex();
     QString subjectEducation();
     int samValence();
-    int samArousal();
+    int samBelief();
 
     QString arduinoButtonsPath();
     QString arduinoSensorsPath();
@@ -80,7 +80,7 @@ public:
     void setSubjectSex(const QString &subjectSex);
     void setSubjectEducation(const QString &subjectEducation);
     void setSamValence(const int &samValence);
-    void setSamArousal(const int &samArousal);
+    void setSamBelief(const int &samBelief);
 
     void setArduinoButtonsPath(const QString &arduinoButtonsPath);
     void setArduinoSensorsPath(const QString &arduinoSensorsPath);
@@ -98,6 +98,14 @@ public:
     Q_INVOKABLE QStringList availablePorts();
     Q_INVOKABLE void connectAll();
     Q_INVOKABLE QList<int> shuffleIndexes();
+
+    Q_INVOKABLE void writeQ1();
+    Q_INVOKABLE void writeQ2();
+    Q_INVOKABLE void writeFile();
+    Q_INVOKABLE void writeSAM();
+
+    Q_INVOKABLE void writeValence();
+    Q_INVOKABLE void writeBelief();
 
     void readButtons();
     void readSensors();
@@ -125,7 +133,8 @@ signals:
     void subjectEducationChanged();
 
     void samValenceChanged();
-    void samArousalChanged();
+    void samBeliefChanged();
+
 
     void arduinoButtonsPathChanged();
     void arduinoSensorsPathChanged();
@@ -153,7 +162,7 @@ private:
     QString m_subjectEducation;
 
     int m_samValence = 0;
-    int m_samArousal = 0;
+    int m_samBelief = 0;
 
     QString m_arduinoButtonsPath;
     QString m_arduinoSensorsPath;

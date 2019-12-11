@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_BackEnd_t {
-    QByteArrayData data[44];
-    char stringdata0[749];
+    QByteArrayData data[50];
+    char stringdata0[807];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -42,47 +42,53 @@ QT_MOC_LITERAL(6, 90, 17), // "subjectAgeChanged"
 QT_MOC_LITERAL(7, 108, 17), // "subjectSexChanged"
 QT_MOC_LITERAL(8, 126, 23), // "subjectEducationChanged"
 QT_MOC_LITERAL(9, 150, 17), // "samValenceChanged"
-QT_MOC_LITERAL(10, 168, 17), // "samArousalChanged"
-QT_MOC_LITERAL(11, 186, 25), // "arduinoButtonsPathChanged"
-QT_MOC_LITERAL(12, 212, 25), // "arduinoSensorsPathChanged"
-QT_MOC_LITERAL(13, 238, 18), // "affectivaIPChanged"
-QT_MOC_LITERAL(14, 257, 25), // "picturesFolderPathChanged"
-QT_MOC_LITERAL(15, 283, 23), // "videosFolderPathChanged"
-QT_MOC_LITERAL(16, 307, 25), // "isPicturesSelectedChanged"
-QT_MOC_LITERAL(17, 333, 23), // "isVideosSelectedChanged"
-QT_MOC_LITERAL(18, 357, 21), // "currentPictureChanged"
-QT_MOC_LITERAL(19, 379, 19), // "currentVideoChanged"
-QT_MOC_LITERAL(20, 399, 14), // "availablePorts"
-QT_MOC_LITERAL(21, 414, 10), // "connectAll"
-QT_MOC_LITERAL(22, 425, 14), // "shuffleIndexes"
-QT_MOC_LITERAL(23, 440, 10), // "QList<int>"
-QT_MOC_LITERAL(24, 451, 18), // "getShuffledIndexes"
-QT_MOC_LITERAL(25, 470, 9), // "subjectId"
-QT_MOC_LITERAL(26, 480, 10), // "subjectAge"
-QT_MOC_LITERAL(27, 491, 10), // "subjectSex"
-QT_MOC_LITERAL(28, 502, 16), // "subjectEducation"
-QT_MOC_LITERAL(29, 519, 18), // "arduinoButtonsPath"
-QT_MOC_LITERAL(30, 538, 18), // "arduinoSensorsPath"
-QT_MOC_LITERAL(31, 557, 11), // "affectivaIP"
-QT_MOC_LITERAL(32, 569, 18), // "picturesFolderPath"
-QT_MOC_LITERAL(33, 588, 16), // "videosFolderPath"
-QT_MOC_LITERAL(34, 605, 18), // "isPicturesSelected"
-QT_MOC_LITERAL(35, 624, 16), // "isVideosSelected"
-QT_MOC_LITERAL(36, 641, 14), // "currentPicture"
-QT_MOC_LITERAL(37, 656, 12), // "currentVideo"
-QT_MOC_LITERAL(38, 669, 12), // "pictureCount"
-QT_MOC_LITERAL(39, 682, 10), // "samArousal"
-QT_MOC_LITERAL(40, 693, 10), // "samValence"
-QT_MOC_LITERAL(41, 704, 14), // "questionnaire1"
-QT_MOC_LITERAL(42, 719, 14), // "QList<QString>"
-QT_MOC_LITERAL(43, 734, 14) // "questionnaire2"
+QT_MOC_LITERAL(10, 168, 16), // "samBeliefChanged"
+QT_MOC_LITERAL(11, 185, 25), // "arduinoButtonsPathChanged"
+QT_MOC_LITERAL(12, 211, 25), // "arduinoSensorsPathChanged"
+QT_MOC_LITERAL(13, 237, 18), // "affectivaIPChanged"
+QT_MOC_LITERAL(14, 256, 25), // "picturesFolderPathChanged"
+QT_MOC_LITERAL(15, 282, 23), // "videosFolderPathChanged"
+QT_MOC_LITERAL(16, 306, 25), // "isPicturesSelectedChanged"
+QT_MOC_LITERAL(17, 332, 23), // "isVideosSelectedChanged"
+QT_MOC_LITERAL(18, 356, 21), // "currentPictureChanged"
+QT_MOC_LITERAL(19, 378, 19), // "currentVideoChanged"
+QT_MOC_LITERAL(20, 398, 14), // "availablePorts"
+QT_MOC_LITERAL(21, 413, 10), // "connectAll"
+QT_MOC_LITERAL(22, 424, 14), // "shuffleIndexes"
+QT_MOC_LITERAL(23, 439, 10), // "QList<int>"
+QT_MOC_LITERAL(24, 450, 7), // "writeQ1"
+QT_MOC_LITERAL(25, 458, 7), // "writeQ2"
+QT_MOC_LITERAL(26, 466, 9), // "writeFile"
+QT_MOC_LITERAL(27, 476, 8), // "writeSAM"
+QT_MOC_LITERAL(28, 485, 12), // "writeValence"
+QT_MOC_LITERAL(29, 498, 11), // "writeBelief"
+QT_MOC_LITERAL(30, 510, 18), // "getShuffledIndexes"
+QT_MOC_LITERAL(31, 529, 9), // "subjectId"
+QT_MOC_LITERAL(32, 539, 10), // "subjectAge"
+QT_MOC_LITERAL(33, 550, 10), // "subjectSex"
+QT_MOC_LITERAL(34, 561, 16), // "subjectEducation"
+QT_MOC_LITERAL(35, 578, 18), // "arduinoButtonsPath"
+QT_MOC_LITERAL(36, 597, 18), // "arduinoSensorsPath"
+QT_MOC_LITERAL(37, 616, 11), // "affectivaIP"
+QT_MOC_LITERAL(38, 628, 18), // "picturesFolderPath"
+QT_MOC_LITERAL(39, 647, 16), // "videosFolderPath"
+QT_MOC_LITERAL(40, 664, 18), // "isPicturesSelected"
+QT_MOC_LITERAL(41, 683, 16), // "isVideosSelected"
+QT_MOC_LITERAL(42, 700, 14), // "currentPicture"
+QT_MOC_LITERAL(43, 715, 12), // "currentVideo"
+QT_MOC_LITERAL(44, 728, 12), // "pictureCount"
+QT_MOC_LITERAL(45, 741, 9), // "samBelief"
+QT_MOC_LITERAL(46, 751, 10), // "samValence"
+QT_MOC_LITERAL(47, 762, 14), // "questionnaire1"
+QT_MOC_LITERAL(48, 777, 14), // "QList<QString>"
+QT_MOC_LITERAL(49, 792, 14) // "questionnaire2"
 
     },
     "BackEnd\0questionnaire1Changed\0\0"
     "questionnaire2Changed\0pictureCountChanged\0"
     "subjectIdChanged\0subjectAgeChanged\0"
     "subjectSexChanged\0subjectEducationChanged\0"
-    "samValenceChanged\0samArousalChanged\0"
+    "samValenceChanged\0samBeliefChanged\0"
     "arduinoButtonsPathChanged\0"
     "arduinoSensorsPathChanged\0affectivaIPChanged\0"
     "picturesFolderPathChanged\0"
@@ -91,15 +97,16 @@ QT_MOC_LITERAL(43, 734, 14) // "questionnaire2"
     "isVideosSelectedChanged\0currentPictureChanged\0"
     "currentVideoChanged\0availablePorts\0"
     "connectAll\0shuffleIndexes\0QList<int>\0"
-    "getShuffledIndexes\0subjectId\0subjectAge\0"
-    "subjectSex\0subjectEducation\0"
-    "arduinoButtonsPath\0arduinoSensorsPath\0"
-    "affectivaIP\0picturesFolderPath\0"
-    "videosFolderPath\0isPicturesSelected\0"
-    "isVideosSelected\0currentPicture\0"
-    "currentVideo\0pictureCount\0samArousal\0"
-    "samValence\0questionnaire1\0QList<QString>\0"
-    "questionnaire2"
+    "writeQ1\0writeQ2\0writeFile\0writeSAM\0"
+    "writeValence\0writeBelief\0getShuffledIndexes\0"
+    "subjectId\0subjectAge\0subjectSex\0"
+    "subjectEducation\0arduinoButtonsPath\0"
+    "arduinoSensorsPath\0affectivaIP\0"
+    "picturesFolderPath\0videosFolderPath\0"
+    "isPicturesSelected\0isVideosSelected\0"
+    "currentPicture\0currentVideo\0pictureCount\0"
+    "samBelief\0samValence\0questionnaire1\0"
+    "QList<QString>\0questionnaire2"
 };
 #undef QT_MOC_LITERAL
 
@@ -109,38 +116,44 @@ static const uint qt_meta_data_BackEnd[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      22,   14, // methods
-      18,  146, // properties
+      28,   14, // methods
+      18,  182, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
       18,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,  124,    2, 0x06 /* Public */,
-       3,    0,  125,    2, 0x06 /* Public */,
-       4,    0,  126,    2, 0x06 /* Public */,
-       5,    0,  127,    2, 0x06 /* Public */,
-       6,    0,  128,    2, 0x06 /* Public */,
-       7,    0,  129,    2, 0x06 /* Public */,
-       8,    0,  130,    2, 0x06 /* Public */,
-       9,    0,  131,    2, 0x06 /* Public */,
-      10,    0,  132,    2, 0x06 /* Public */,
-      11,    0,  133,    2, 0x06 /* Public */,
-      12,    0,  134,    2, 0x06 /* Public */,
-      13,    0,  135,    2, 0x06 /* Public */,
-      14,    0,  136,    2, 0x06 /* Public */,
-      15,    0,  137,    2, 0x06 /* Public */,
-      16,    0,  138,    2, 0x06 /* Public */,
-      17,    0,  139,    2, 0x06 /* Public */,
-      18,    0,  140,    2, 0x06 /* Public */,
-      19,    0,  141,    2, 0x06 /* Public */,
+       1,    0,  154,    2, 0x06 /* Public */,
+       3,    0,  155,    2, 0x06 /* Public */,
+       4,    0,  156,    2, 0x06 /* Public */,
+       5,    0,  157,    2, 0x06 /* Public */,
+       6,    0,  158,    2, 0x06 /* Public */,
+       7,    0,  159,    2, 0x06 /* Public */,
+       8,    0,  160,    2, 0x06 /* Public */,
+       9,    0,  161,    2, 0x06 /* Public */,
+      10,    0,  162,    2, 0x06 /* Public */,
+      11,    0,  163,    2, 0x06 /* Public */,
+      12,    0,  164,    2, 0x06 /* Public */,
+      13,    0,  165,    2, 0x06 /* Public */,
+      14,    0,  166,    2, 0x06 /* Public */,
+      15,    0,  167,    2, 0x06 /* Public */,
+      16,    0,  168,    2, 0x06 /* Public */,
+      17,    0,  169,    2, 0x06 /* Public */,
+      18,    0,  170,    2, 0x06 /* Public */,
+      19,    0,  171,    2, 0x06 /* Public */,
 
  // methods: name, argc, parameters, tag, flags
-      20,    0,  142,    2, 0x02 /* Public */,
-      21,    0,  143,    2, 0x02 /* Public */,
-      22,    0,  144,    2, 0x02 /* Public */,
-      24,    0,  145,    2, 0x02 /* Public */,
+      20,    0,  172,    2, 0x02 /* Public */,
+      21,    0,  173,    2, 0x02 /* Public */,
+      22,    0,  174,    2, 0x02 /* Public */,
+      24,    0,  175,    2, 0x02 /* Public */,
+      25,    0,  176,    2, 0x02 /* Public */,
+      26,    0,  177,    2, 0x02 /* Public */,
+      27,    0,  178,    2, 0x02 /* Public */,
+      28,    0,  179,    2, 0x02 /* Public */,
+      29,    0,  180,    2, 0x02 /* Public */,
+      30,    0,  181,    2, 0x02 /* Public */,
 
  // signals: parameters
     QMetaType::Void,
@@ -166,27 +179,33 @@ static const uint qt_meta_data_BackEnd[] = {
     QMetaType::QStringList,
     QMetaType::Void,
     0x80000000 | 23,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
     0x80000000 | 23,
 
  // properties: name, type, flags
-      25, QMetaType::QString, 0x00495103,
-      26, QMetaType::Int, 0x00495103,
-      27, QMetaType::QString, 0x00495103,
-      28, QMetaType::QString, 0x00495103,
-      29, QMetaType::QString, 0x00495103,
-      30, QMetaType::QString, 0x00495103,
       31, QMetaType::QString, 0x00495103,
-      32, QMetaType::QString, 0x00495103,
+      32, QMetaType::Int, 0x00495103,
       33, QMetaType::QString, 0x00495103,
-      34, QMetaType::Bool, 0x00495103,
-      35, QMetaType::Bool, 0x00495103,
+      34, QMetaType::QString, 0x00495103,
+      35, QMetaType::QString, 0x00495103,
       36, QMetaType::QString, 0x00495103,
       37, QMetaType::QString, 0x00495103,
-      38, QMetaType::Int, 0x00495103,
-      39, QMetaType::Int, 0x00495103,
-      40, QMetaType::Int, 0x00495103,
-      41, 0x80000000 | 42, 0x0049510b,
-      43, 0x80000000 | 42, 0x0049510b,
+      38, QMetaType::QString, 0x00495103,
+      39, QMetaType::QString, 0x00495103,
+      40, QMetaType::Bool, 0x00495103,
+      41, QMetaType::Bool, 0x00495103,
+      42, QMetaType::QString, 0x00495103,
+      43, QMetaType::QString, 0x00495103,
+      44, QMetaType::Int, 0x00495103,
+      45, QMetaType::Int, 0x00495103,
+      46, QMetaType::Int, 0x00495103,
+      47, 0x80000000 | 48, 0x0049510b,
+      49, 0x80000000 | 48, 0x0049510b,
 
  // properties: notify_signal_id
        3,
@@ -225,7 +244,7 @@ void BackEnd::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         case 5: _t->subjectSexChanged(); break;
         case 6: _t->subjectEducationChanged(); break;
         case 7: _t->samValenceChanged(); break;
-        case 8: _t->samArousalChanged(); break;
+        case 8: _t->samBeliefChanged(); break;
         case 9: _t->arduinoButtonsPathChanged(); break;
         case 10: _t->arduinoSensorsPathChanged(); break;
         case 11: _t->affectivaIPChanged(); break;
@@ -240,7 +259,13 @@ void BackEnd::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         case 19: _t->connectAll(); break;
         case 20: { QList<int> _r = _t->shuffleIndexes();
             if (_a[0]) *reinterpret_cast< QList<int>*>(_a[0]) = std::move(_r); }  break;
-        case 21: { QList<int> _r = _t->getShuffledIndexes();
+        case 21: _t->writeQ1(); break;
+        case 22: _t->writeQ2(); break;
+        case 23: _t->writeFile(); break;
+        case 24: _t->writeSAM(); break;
+        case 25: _t->writeValence(); break;
+        case 26: _t->writeBelief(); break;
+        case 27: { QList<int> _r = _t->getShuffledIndexes();
             if (_a[0]) *reinterpret_cast< QList<int>*>(_a[0]) = std::move(_r); }  break;
         default: ;
         }
@@ -304,7 +329,7 @@ void BackEnd::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         }
         {
             using _t = void (BackEnd::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&BackEnd::samArousalChanged)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&BackEnd::samBeliefChanged)) {
                 *result = 8;
                 return;
             }
@@ -401,7 +426,7 @@ void BackEnd::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         case 11: *reinterpret_cast< QString*>(_v) = _t->currentPicture(); break;
         case 12: *reinterpret_cast< QString*>(_v) = _t->currentVideo(); break;
         case 13: *reinterpret_cast< int*>(_v) = _t->pictureCount(); break;
-        case 14: *reinterpret_cast< int*>(_v) = _t->samArousal(); break;
+        case 14: *reinterpret_cast< int*>(_v) = _t->samBelief(); break;
         case 15: *reinterpret_cast< int*>(_v) = _t->samValence(); break;
         case 16: *reinterpret_cast< QList<QString>*>(_v) = _t->questionnaire1(); break;
         case 17: *reinterpret_cast< QList<QString>*>(_v) = _t->questionnaire2(); break;
@@ -426,7 +451,7 @@ void BackEnd::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         case 11: _t->setCurrentPicture(*reinterpret_cast< QString*>(_v)); break;
         case 12: _t->setCurrentVideo(*reinterpret_cast< QString*>(_v)); break;
         case 13: _t->setPictureCount(*reinterpret_cast< int*>(_v)); break;
-        case 14: _t->setSamArousal(*reinterpret_cast< int*>(_v)); break;
+        case 14: _t->setSamBelief(*reinterpret_cast< int*>(_v)); break;
         case 15: _t->setSamValence(*reinterpret_cast< int*>(_v)); break;
         case 16: _t->setQuestionnaire1(*reinterpret_cast< QList<QString>*>(_v)); break;
         case 17: _t->setQuestionnaire2(*reinterpret_cast< QList<QString>*>(_v)); break;
@@ -466,13 +491,13 @@ int BackEnd::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 22)
+        if (_id < 28)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 22;
+        _id -= 28;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 22)
+        if (_id < 28)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 22;
+        _id -= 28;
     }
 #ifndef QT_NO_PROPERTIES
     else if (_c == QMetaObject::ReadProperty || _c == QMetaObject::WriteProperty
@@ -543,7 +568,7 @@ void BackEnd::samValenceChanged()
 }
 
 // SIGNAL 8
-void BackEnd::samArousalChanged()
+void BackEnd::samBeliefChanged()
 {
     QMetaObject::activate(this, &staticMetaObject, 8, nullptr);
 }

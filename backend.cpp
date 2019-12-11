@@ -7,10 +7,14 @@
 #include <QTime>
 #include <random>
 #include <ctime>
+#include <QProcess>
+
 
 zmq::context_t contextAffectiva(1);
 zmq::socket_t subscriber(contextAffectiva, ZMQ_SUB);
 QFile measurement;
+QTime t;
+long long ms;
 
 
 
@@ -38,7 +42,7 @@ void BackEnd::setQuestionnaire1(const QList<QString> &questionnaire1){
 
 
 QList<QString> BackEnd::questionnaire2() {
-    return m_questionnaire1;
+    return m_questionnaire2;
 }
 
 void BackEnd::setQuestionnaire2(const QList<QString> &questionnaire2){
@@ -295,23 +299,15 @@ QStringList BackEnd::availablePorts()
 
 void BackEnd::connectAll()
 {
-
+        t.start();
+        ms = t.elapsed();
+        qDebug() << "ms: " << ms;
         QString address = "tcp://" + affectivaIP();
         subscriber.connect(address.toUtf8().constData());
         subscriber.setsockopt( ZMQ_SUBSCRIBE, "aff", 3);
 
         connect(&m_affectivaTimer, &QTimer::timeout, this, &BackEnd::readAffectiva);
         m_affectivaTimer.start(20);
-
-        QDateTime UTC(QDateTime::currentDateTimeUtc());
-        QDateTime local(UTC);
-
-        measurement.setFileName("./" + subjectId() + "_emotion_pictures_" + local.toString() +".csv");
-        measurement.open(QIODevice::ReadWrite);
-        QTextStream measurementHeader( &measurement );
-        measurementHeader << "id;age;sex;education"<< endl;
-        measurementHeader << subjectId() <<";"<< subjectAge() <<";"<< subjectSex() << ";" << subjectEducation() << endl;
-        measurementHeader << "joy;fear;disgust;sadness;anger;surprise;contempt;valence;engagement;affectivaAgeGroup;affectivaGender;Timestamp;TimeReacted" << endl;
 
         connect(&m_fileWriterTimer, &QTimer::timeout, this, &BackEnd::handleWriting);
         m_fileWriterTimer.start(20);
@@ -363,11 +359,11 @@ void BackEnd::handleError(QSerialPort::SerialPortError serialPortError)
 
 void BackEnd::handleWriting() {
 
-    static QTime time(QTime::currentTime());
+    //static QTime time(QTime::currentTime());
 
     QTextStream measurementStream( &measurement );
 
-   measurementStream << m_readAffectiva << ";" <<  ";" << time.elapsed() << endl;
+   measurementStream << m_readAffectiva <<";"<< ";" <<  ";" << t.elapsed() << endl;
 
 }
 
@@ -414,17 +410,80 @@ void BackEnd::setSamValence(const int &samValence)
     emit samValenceChanged();
 }
 
-int BackEnd::samArousal()
+int BackEnd::samBelief()
 {
-    return m_samArousal;
+    return m_samBelief;
 }
 
-void BackEnd::setSamArousal(const int &samArousal)
+void BackEnd::setSamBelief(const int &samArousal)
 {
-    if (samArousal == m_samArousal)
+    if (samArousal == m_samBelief)
         return;
 
-    m_samArousal = samArousal;
-    qDebug() << "SAM AROUSAL: " << m_samArousal;
-    emit samArousalChanged();
+    m_samBelief = samArousal;
+    qDebug() << "SAM AROUSAL: " << m_samBelief;
+    emit samBeliefChanged();
+}
+
+void BackEnd::writeQ1(){
+    QTextStream q(&measurement);
+    q << "questionaire 1" << endl;
+    for(const QString& str : questionnaire1()){
+        q << str << ";";
+    }
+
+    q << endl;
+
+}
+
+void BackEnd::writeQ2(){
+    QTextStream q(&measurement);
+    q << "questionaire 2" << endl;
+    for(const QString& str : questionnaire2()){
+        q << str << ";";
+    }
+
+    q << endl;
+    q << "joy;fear;disgust;sadness;anger;surprise;contempt;valence;engagement;affectivaAgeGroup;affectivaGender;Valence;Believability;Timestamp;TimeToReact;" << endl;
+
+    ms = t.elapsed();
+
+}
+
+void BackEnd::writeFile(){
+    QDateTime UTC(QDateTime::currentDateTimeUtc());
+    QDateTime local(UTC);
+    measurement.setFileName("/home/emosense/Documents/" + subjectId() + "_emotion_pictures_" + local.toString() +".csv");
+    measurement.open(QIODevice::ReadWrite);
+    QTextStream measurementHeader( &measurement );
+    measurementHeader << "id;age;sex;education"<< endl;
+    measurementHeader << subjectId() <<";"<< subjectAge() <<";"<< subjectSex() << ";" << subjectEducation() << endl;
+
+
+
+}
+
+void BackEnd::writeSAM(){
+    QTextStream q(&measurement);
+    //static QTime time(QTime::currentTime());
+
+    ms = t.elapsed() - ms;
+    q << ";" << ";" << ";" << ";" << ";" << ";" << ";" << ";" << ";"  << ";" << ";"<< samBelief() << ";" << samValence() << ";" << t.elapsed() << ";" << ms << endl ;
+    ms = t.elapsed();
+}
+void BackEnd::writeValence(){
+    QTextStream q(&measurement);
+    //static QTime time(QTime::currentTime());
+
+    ms = t.elapsed() - ms;
+    q << ";" << ";" << ";" << ";" << ";" << ";" << ";" << ";" << ";"  << ";" << ";" << samValence() << ";;" << t.elapsed() << ";" << ms << endl ;
+    ms = t.elapsed();
+}
+void BackEnd::writeBelief(){
+    QTextStream q(&measurement);
+    //static QTime time(QTime::currentTime());
+
+    ms = t.elapsed() - ms;
+    q << ";" << ";" << ";" << ";" << ";" << ";" << ";" << ";" << ";"  << ";" << ";"  << ";" << samBelief() << ";" << t.elapsed() << ";" << ms << endl ;
+    ms = t.elapsed();
 }

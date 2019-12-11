@@ -8,8 +8,10 @@ import Qt.labs.platform 1.0
 import Qt.labs.folderlistmodel 2.2
 import com.tylnesh.backend 1.0
 
+
 ApplicationWindow {
     id: root
+    visibility: Qt.WindowFullScreen
     visible: true
     width: (Screen.desktopAvailableWidth <= 2560) ? Screen.desktopAvailableWidth : 2560
     height: width / 1.777777778
@@ -381,6 +383,9 @@ ApplicationWindow {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
+
+
+                    if (!(subjectID.text == "")){
                     //backend.arduinoButtonsPath = arduinoButtonsPath.currentText
                     //backend.arduinoSensorsPath = arduinoSensorsPath.currentText
                     backend.affectivaIP = affectivaIP.text
@@ -389,8 +394,13 @@ ApplicationWindow {
                     backend.subjectAge = subjectAge.text
                     backend.subjectSex = subjectSexCombo.currentText
                     backend.subjectEducation = subjectEducationCombo.currentText
+                    backend.writeFile();
                     questionnaire1.visible = true
                     console.log(Screen.desktopAvailableWidth)
+                    }
+                    else {
+                    errorDialog.visible = true
+                    }
                 }
             }
         }
@@ -405,6 +415,8 @@ ApplicationWindow {
 
         ScrollView {
             anchors.fill: parent
+            ScrollBar.vertical.policy: ScrollBar.AlwaysOn
+
             ColumnLayout {
                 spacing: 10
 
@@ -423,16 +435,28 @@ ApplicationWindow {
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
+
                     Text {
+                        id: textQ1_1
                         text: qsTr("1. Rada/Rád zabávam spoločnosť.")
+
                     }
+
 
                     ButtonGroup {
                         id: rowQ1_b1
                         buttons: rowQ1_1.children
+
+
+
 
                     }
 
@@ -441,8 +465,10 @@ ApplicationWindow {
 
 
 
+
                         RadioButton {
                             text: qsTr("1")
+
                         }
 
                         RadioButton {
@@ -461,8 +487,14 @@ ApplicationWindow {
                             text: qsTr("5")
                         }
                     }
+
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -501,6 +533,11 @@ ApplicationWindow {
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -539,6 +576,11 @@ ApplicationWindow {
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -577,6 +619,11 @@ ApplicationWindow {
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -615,6 +662,11 @@ ApplicationWindow {
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -653,6 +705,11 @@ ApplicationWindow {
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -691,6 +748,11 @@ ApplicationWindow {
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -729,6 +791,11 @@ ApplicationWindow {
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -767,6 +834,11 @@ ApplicationWindow {
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -805,6 +877,11 @@ ApplicationWindow {
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -843,6 +920,11 @@ ApplicationWindow {
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -882,6 +964,11 @@ ApplicationWindow {
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -920,6 +1007,11 @@ ApplicationWindow {
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -958,6 +1050,11 @@ ApplicationWindow {
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -996,6 +1093,11 @@ ApplicationWindow {
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -1034,6 +1136,11 @@ ApplicationWindow {
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -1073,6 +1180,11 @@ ApplicationWindow {
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -1111,6 +1223,11 @@ ApplicationWindow {
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -1149,6 +1266,11 @@ ApplicationWindow {
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -1191,7 +1313,7 @@ ApplicationWindow {
                     width: 150
                     height: 100
                     color: "green"
-                    anchors.right: parent.right
+                    Layout.alignment: Qt.AlignRight
                     Text {
                         anchors.centerIn: parent
                         font.family: "Helvetica"
@@ -1205,8 +1327,9 @@ ApplicationWindow {
 
 try{
                             backend.questionnaire1 = [rowQ1_b1.checkedButton.text, rowQ1_b2.checkedButton.text, rowQ1_b3.checkedButton.text, rowQ1_b4.checkedButton.text, rowQ1_b5.checkedButton.text, rowQ1_b6.checkedButton.text, rowQ1_b7.checkedButton.text, rowQ1_b8.checkedButton.text, rowQ1_b9.checkedButton.text, rowQ1_b10.checkedButton.text, rowQ1_b11.checkedButton.text, rowQ1_b12.checkedButton.text, rowQ1_b13.checkedButton.text, rowQ1_b14.checkedButton.text, rowQ1_b15.checkedButton.text, rowQ1_b16.checkedButton.text, rowQ1_b17.checkedButton.text, rowQ1_b18.checkedButton.text, rowQ1_b19.checkedButton.text, rowQ1_b20.checkedButton.text]
-                        questionnaire2.visible = true
-                                questionnaire1.close()
+                            backend.writeQ1()
+    questionnaire2.visible = true
+                        questionnaire1.close()
 } catch(e) {errorDialog.visible = true}
 
                         }
@@ -1242,6 +1365,11 @@ try{
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -1283,6 +1411,11 @@ try{
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -1324,6 +1457,11 @@ try{
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -1365,6 +1503,11 @@ try{
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -1406,6 +1549,11 @@ try{
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -1447,6 +1595,11 @@ try{
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -1489,6 +1642,11 @@ try{
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -1530,6 +1688,11 @@ try{
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -1571,6 +1734,11 @@ try{
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -1612,6 +1780,11 @@ try{
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -1653,6 +1826,11 @@ try{
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -1695,6 +1873,11 @@ try{
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -1737,6 +1920,11 @@ try{
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -1778,6 +1966,11 @@ try{
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -1819,6 +2012,11 @@ try{
                     }
                 }
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Row {
                     padding: 5
 
@@ -1833,6 +2031,7 @@ try{
 
                     Row {
                         id: rowQ2_15
+
 
                         RadioButton {
 
@@ -1861,12 +2060,17 @@ try{
                 }
 
 
+                Rectangle{
+                color: "black"
+                height: 1
+                width: questionnaire1.width
+                }
                 Rectangle {
                     id: submitQ2
                     width: 150
                     height: 100
                     color: "green"
-                    anchors.right: parent.right
+                    Layout.alignment: Qt.AlignRight
                     Text {
                         anchors.centerIn: parent
                         font.family: "Helvetica"
@@ -1877,10 +2081,14 @@ try{
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
-                            backend.questionnaire1 = [rowQ2_b1.checkedButton.text, rowQ2_b2.checkedButton.text, rowQ2_b3.checkedButton.text, rowQ2_b4.checkedButton.text, rowQ2_b5.checkedButton.text, rowQ2_b6.checkedButton.text, rowQ2_b7.checkedButton.text, rowQ2_b8.checkedButton.text, rowQ2_b9.checkedButton.text, rowQ2_b10.checkedButton.text, rowQ2_b11.checkedButton.text, rowQ2_b12.checkedButton.text, rowQ2_b13.checkedButton.text, rowQ2_b14.checkedButton.text, rowQ2_b15.checkedButton.text]
+
+                            try{
+                            backend.questionnaire2 = [rowQ2_b1.checkedButton.text, rowQ2_b2.checkedButton.text, rowQ2_b3.checkedButton.text, rowQ2_b4.checkedButton.text, rowQ2_b5.checkedButton.text, rowQ2_b6.checkedButton.text, rowQ2_b7.checkedButton.text, rowQ2_b8.checkedButton.text, rowQ2_b9.checkedButton.text, rowQ2_b10.checkedButton.text, rowQ2_b11.checkedButton.text, rowQ2_b12.checkedButton.text, rowQ2_b13.checkedButton.text, rowQ2_b14.checkedButton.text, rowQ2_b15.checkedButton.text]
+                            backend.writeQ2()
                             backend.connectAll()
                             quotesWindow.visible= true
                             questionnaire2.close()
+                               } catch(e) {errorDialog.visible = true}
                         }
                     }
                 }
@@ -1900,7 +2108,7 @@ try{
 
             horizontalAlignment: Text.AlignJustify
             wrapMode: Text.WordWrap
-            font.pointSize: 24
+            font.pointSize: 16
             text: (isNamedQuotes.checked == true) ? quotesAuthor[quotesSelected[i]] + " - " + quotesParty[quotesSelected[i]] + " - " + quotesText[quotesSelected[i]] : quotesText[quotesSelected[i]]
 
             }
@@ -1924,6 +2132,10 @@ try{
                         stepSize: 1
                         snapMode: Slider.SnapAlways
                         to: 9
+                        onMoved: {
+                        backend.samValence = samValenceSlider.value
+                        backend.writeValence()
+                        }
                     }
 
 
@@ -1940,6 +2152,11 @@ try{
                         stepSize: 1
                         snapMode: Slider.SnapAlways
                         to: 9
+
+                        onMoved: {
+                        backend.samBelief = samBelievebalitySlider.value
+                        backend.writeBelief()
+                        }
                     }
 
             Rectangle {
@@ -1959,6 +2176,10 @@ try{
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
+                        backend.samValence = samValenceSlider.value
+                        backend.samBelief = samBelievebalitySlider.value
+                        backend.writeSAM();
+
                        if (i < quotesSelected.length) i++
                        else quotesWindow.close()
                        quotesWindowText.text =  (isNamedQuotes.checked == true) ? quotesAuthor[quotesSelected[i]] + " - " + quotesParty[quotesSelected[i]] + " - " + quotesText[quotesSelected[i]] : quotesText[quotesSelected[i]]
@@ -1978,23 +2199,33 @@ try{
         }
 
 
-    MessageDialog {
+    Window {
        // modality: Qt.WindowModal
-        //height: root.height/2
-        //width: root.width/2
+        x: root.width/4
+        y: root.height/4
+        height: root.height/2
+        width: root.width/2
+        flags: Qt.WindowStaysOnTopHint
         visible: false
-        title: "Je nutne zodpovedat vsetky otazky"
+        title: "Je nutné vyplniť formulár"
         id: errorDialog
 
-        Rectangle {
-            color: "lightskyblue"
-            implicitWidth: 400
-            implicitHeight: 100
+
             Text {
-                text: "Hello blue sky!"
-                color: "navy"
+                text: "Prosím, vyplňte všetky kolónky!"
+                color: "black"
                 anchors.centerIn: parent
             }
+
+            Button {
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right
+                anchors.bottomMargin: 10
+                anchors.rightMargin: 10
+                text: "OK"
+                onClicked: {errorDialog.visible= false;}
+
+
         }
     }
 
